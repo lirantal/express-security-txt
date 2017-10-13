@@ -1,6 +1,6 @@
 {
   "name": "express-security-txt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Express middleware that implements a security.txt path and policy",
   "main": "index.js",
   "scripts": {
