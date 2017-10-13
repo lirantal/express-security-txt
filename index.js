@@ -12,11 +12,11 @@ class middleware {
 
     return (req, res, next) => {
       // Only handle requests for our intended use
-      if (req.path !== '/security.txt' && req.method.toLowerCase() !== 'get') {
-        return next()
+      if (req.path === '/security.txt' && req.method.toLowerCase() === 'get') {
+        return res.status(200).send(securityPolicy)
       }
 
-      return res.status(200).send(securityPolicy)
+      return next()
     }
   }
 
