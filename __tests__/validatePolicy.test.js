@@ -15,7 +15,7 @@ test('validate doesnt throw an error on provided fields', () => {
 test('validate successfully when only mandatory properties provided', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
+    disclosure: 'full'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
@@ -39,7 +39,7 @@ test('validate fails when options is not an object', () => {
 test('validate fails when no contact property provided', () => {
   const options = {
     disclosure: 'full',
-    encryption: 'https://www.mykey.com/pgp-key.txt',
+    encryption: 'https://www.mykey.com/pgp-key.txt'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
@@ -48,7 +48,7 @@ test('validate fails when no contact property provided', () => {
 test('validate fails when no disclosure property provided', () => {
   const options = {
     contact: 'email@example.com',
-    encryption: 'https://www.mykey.com/pgp-key.txt',
+    encryption: 'https://www.mykey.com/pgp-key.txt'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
@@ -58,7 +58,7 @@ test('validate fails when encryption property is used without https', () => {
   const options = {
     contact: 'email@example.com',
     disclosure: 'full',
-    encryption: 'http://www.mykey.com/pgp-key.txt',
+    encryption: 'http://www.mykey.com/pgp-key.txt'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
