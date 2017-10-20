@@ -1,3 +1,8 @@
+[![view on npm](http://img.shields.io/npm/v/express-security-txt.svg)](https://www.npmjs.org/package/express-security-txt)
+[![view on npm](http://img.shields.io/npm/l/express-security-txt.svg)](https://www.npmjs.org/package/express-security-txt)
+[![npm module downloads](http://img.shields.io/npm/dt/express-security-txt.svg)](https://www.npmjs.org/package/express-security-txt)
+[![Dependency Status](https://david-dm.org/lirantal/express-security-txt.svg)](https://david-dm.org/lirantal/express-security-txt)
+
 # Express Security Txt
 
 Express middleware that implements a security.txt path and policy
