@@ -7,6 +7,8 @@
 
 # Express Security Txt
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/lirantal/express-security-txt.svg)](https://greenkeeper.io/)
+
 Express middleware that implements a security.txt path and policy
 
 References:
