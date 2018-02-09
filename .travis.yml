@@ -4,8 +4,9 @@ node_js:
 install:
   - yarn global add codecov
   - yarn install
-script: 
+script:
   - yarn run lint
   - yarn run test
   - codecov
-
+after_success:
+  - yarn run semantic-release

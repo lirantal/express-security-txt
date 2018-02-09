@@ -12,7 +12,8 @@
     "commit": "git-cz",
     "docs": "yarn run docs:code && yarn run docs:api",
     "docs:api": "doxdox *.js --layout bootstrap --output docs/index.html",
-    "docs:code": "docco *.js --output docs/code"
+    "docs:code": "docco *.js --output docs/code",
+    "semantic-release": "semantic-release"
   },
   "author": "Liran Tal",
   "license": "MIT",
@@ -86,6 +87,29 @@
       "ecmaFeatures": {
         "impliedStrict": true
       }
+    }
+  },
+  "dependencies": {
+    "semantic-release": "^12.4.1"
+  },
+  "release": {
+    "branch": "master",
+    "analyzeCommits": {
+      "preset": "angular",
+      "releaseRules": [
+        {
+          "type": "docs",
+          "release": "patch"
+        },
+        {
+          "type": "refactor",
+          "release": "patch"
+        },
+        {
+          "type": "style",
+          "release": "patch"
+        }
+      ]
     }
   }
 }
