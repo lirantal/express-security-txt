@@ -50,6 +50,18 @@ class middleware {
       policySetting['Acknowledgement'] = options.acknowledgement
     }
 
+    if (options.signature) {
+      policySetting['Signature'] = options.signature
+    }
+
+    if (options.policy) {
+      policySetting['Policy'] = options.policy
+    }
+
+    if (options.hiring) {
+      policySetting['Hiring'] = options.hiring
+    }
+
     const tmpPolicyArray = []
     for (const [field, value] of Object.entries(policySetting)) {
       if (typeof value === 'object') {
@@ -101,6 +113,18 @@ class middleware {
 
     if (options.acknowledgement && typeof options.acknowledgement !== 'string') {
       throw new Error('express-security-txt: invalid acknowledgement property, expecting string in options')
+    }
+
+    if (options.signature && typeof options.signature !== 'string') {
+      throw new Error('express-security-txt: invalid signature property, expecting string in options')
+    }
+
+    if (options.policy && typeof options.policy !== 'string') {
+      throw new Error('express-security-txt: invalid policy property, expecting string in options')
+    }
+
+    if (options.hiring && typeof options.hiring !== 'string') {
+      throw new Error('express-security-txt: invalid hiring property, expecting string in options')
     }
 
     return true
