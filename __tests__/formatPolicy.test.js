@@ -62,3 +62,23 @@ test('formats successfully with multiple contact options and values in-tact', ()
     `Acknowledgement: ${acknowledgement}`
   )
 })
+
+test('formats successfully with policy, hiring and signature fields', () => {
+  const options = {
+    contact: 'email@example.com',
+    disclosure: 'full',
+    signature: 'http://example.com/.well-known/signature.txt.sig',
+    policy: 'http://example.com/policy.txt',
+    hiring: 'http://example.com/hiring.txt'
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    'Contact: email@example.com\n' +
+    'Disclosure: full\n' +
+    'Signature: http://example.com/.well-known/signature.txt.sig\n' +
+    'Policy: http://example.com/policy.txt\n' +
+    'Hiring: http://example.com/hiring.txt'
+  )
+})

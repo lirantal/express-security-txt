@@ -84,3 +84,33 @@ test('validate fails when acknowledgement property is not a string', () => {
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
+
+test('validate fails when policy property is not a string', () => {
+  const options = {
+    contact: 'email@example.com',
+    disclosure: 'full',
+    policy: {}
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate fails when signature property is not a string', () => {
+  const options = {
+    contact: 'email@example.com',
+    disclosure: 'full',
+    signature: {}
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate fails when hiring property is not a string', () => {
+  const options = {
+    contact: 'email@example.com',
+    disclosure: 'full',
+    hiring: {}
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
