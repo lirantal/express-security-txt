@@ -13,7 +13,9 @@
     "docs": "yarn run docs:code && yarn run docs:api",
     "docs:api": "doxdox *.js --layout bootstrap --output docs/index.html",
     "docs:code": "docco *.js --output docs/code",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "author": "Liran Tal",
   "license": "MIT",
@@ -90,7 +92,8 @@
     }
   },
   "dependencies": {
-    "semantic-release": "^15.0.0"
+    "semantic-release": "^15.0.0",
+    "snyk": "^1.90.0"
   },
   "release": {
     "branch": "master",
@@ -111,5 +114,6 @@
         }
       ]
     }
-  }
+  },
+  "snyk": true
 }
