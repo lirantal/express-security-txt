@@ -35,7 +35,6 @@ const securityTxt = require('express-security-txt')
 
 const options = {
   contact: 'email@example.com',
-  disclosure: 'full',
   encryption: 'https://www.mykey.com/pgp-key.txt',
   acknowledgement: 'thank you'
 }
