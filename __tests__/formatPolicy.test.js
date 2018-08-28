@@ -24,7 +24,7 @@ test('formats successfully with mandatory field only', () => {
   const res = securityTxt.formatSecurityPolicy(options)
 
   expect(res).toBe(
-    'Contact: email@example.com
+    'Contact: email@example.com'
   )
 })
 
