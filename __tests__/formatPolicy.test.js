@@ -18,7 +18,7 @@ test('formats successfully with correct fields (singular contact field)', () => 
 
 test('formats successfully with mandatory field only', () => {
   const options = {
-    contact: 'email@example.com',
+    contact: 'email@example.com'
   }
 
   const res = securityTxt.formatSecurityPolicy(options)
