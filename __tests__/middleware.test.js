@@ -18,9 +18,12 @@ test('correctly handle middleware setup for security policy', () => {
   const reqObject = jest.fn()
   const res = {
     status: (code) => ({
-      header: {
-	    send: reqObject
-	  }
+      header: (contentType) => ({
+        if(contentType !== 'text/plain' || code !== 200) {
+			return
+		}
+        send: reqObject
+      }
     })
   }
   const next = {}
