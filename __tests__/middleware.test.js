@@ -21,7 +21,7 @@ test('correctly handle middleware setup for security policy', () => {
       header: (header, value) => {
         if (value === 'text/plain' && code === 200) {
           return {
-            send: () => {}
+            send: reqObject
           }
         }
       }
