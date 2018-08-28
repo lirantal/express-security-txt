@@ -40,8 +40,6 @@ class middleware {
       policySetting['Contact'] = options.contact
     }
 
-    policySetting['Disclosure'] = options.disclosure
-
     if (options.encryption) {
       policySetting['Encryption'] = options.encryption
     }
@@ -90,15 +88,6 @@ class middleware {
 
     if (!options.contact) {
       throw new Error('express-security-txt: need to specify a contact property in options')
-    }
-
-    if (!options.disclosure || typeof options.disclosure !== 'string') {
-      throw new Error('express-security-txt: need to specify a disclosure property in options')
-    }
-
-    const disclosureOption = options.disclosure.toLowerCase()
-    if (disclosureOption !== 'full' && disclosureOption !== 'partial' && disclosureOption !== 'none') {
-      throw new Error('express-security-txt: invalid disclosure option')
     }
 
     if (options.encryption) {

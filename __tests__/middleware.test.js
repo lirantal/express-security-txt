@@ -3,7 +3,6 @@ const securityTxtMiddleware = require('../index')
 test('correctly handle middleware setup for security policy', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
     encryption: 'https://www.mykey.com/pgp-key.txt',
     acknowledgement: 'thank you'
   }
@@ -33,7 +32,6 @@ test('correctly handle middleware setup for security policy', () => {
 test('skip middleware if method is not GET', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
     encryption: 'https://www.mykey.com/pgp-key.txt',
     acknowledgement: 'thank you'
   }
@@ -55,7 +53,6 @@ test('skip middleware if method is not GET', () => {
 test('skip middleware if path is not /security.txt', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
     encryption: 'https://www.mykey.com/pgp-key.txt',
     acknowledgement: 'thank you'
   }
