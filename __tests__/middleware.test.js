@@ -17,11 +17,11 @@ test('correctly handle middleware setup for security policy', () => {
 
   const reqObject = jest.fn()
   const res = {
-    status: (code) => {
-      return {
-        send: reqObject
-      }
-    }
+    status: (code) => ({
+      header: {
+	    send: reqObject
+	  }
+    })
   }
   const next = {}
 

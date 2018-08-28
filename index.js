@@ -14,7 +14,7 @@ class middleware {
       // Only handle requests for our intended use
       if ((req.path === '/security.txt' || req.path === '/.well-known/security.txt') &&
           req.method.toLowerCase() === 'get') {
-        return res.status(200).send(securityPolicy)
+        return res.status(200).header('Content-Type', 'text/plain').send(securityPolicy)
       }
 
       return next()
