@@ -16,11 +16,15 @@ test('correctly handle middleware setup for security policy', () => {
 
   const reqObject = jest.fn()
   const res = {
-    status: (code) => {
-      return {
-        send: reqObject
+    status: (code) => ({
+      header: (header, value) => {
+        if (value === 'text/plain' && code === 200) {
+          return {
+            send: reqObject
+          }
+        }
       }
-    }
+    })
   }
   const next = {}
 
