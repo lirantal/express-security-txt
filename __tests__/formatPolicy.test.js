@@ -4,7 +4,8 @@ test('formats successfully with correct fields (singular contact field)', () => 
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    acknowledgement: 'thank you'
+    acknowledgement: 'thank you',
+    permission: 'none'
   }
 
   const res = securityTxt.formatSecurityPolicy(options)
@@ -12,7 +13,8 @@ test('formats successfully with correct fields (singular contact field)', () => 
   expect(res).toBe(
     'Contact: email@example.com\n' +
     'Encryption: https://www.mykey.com/pgp-key.txt\n' +
-    'Acknowledgement: thank you'
+    'Acknowledgement: thank you\n' +
+    'Permission: none'
   )
 })
 
