@@ -124,7 +124,7 @@ class middleware {
       if (typeof options.permission !== 'string') {
         throw new Error('express-security-txt: invalid permission property, expecting string in options')
       }
-      
+
       if (options.permission.toLowerCase() !== 'none') {
         throw new Error('express-security-txt: invalid permission property, must be string value "none"')
       }
