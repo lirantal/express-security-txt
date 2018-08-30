@@ -120,8 +120,14 @@ class middleware {
       throw new Error('express-security-txt: invalid hiring property, expecting string in options')
     }
 
-    if (options.permission && options.permission !== 'none') {
-      throw new Error('express-security-txt: invalid permission property, expecting string value "none" in options')
+    if (options.permission) {
+      if (typeof options.permission !== 'string') {
+        throw new Error('express-security-txt: invalid permission property, expecting string in options')
+      }
+      
+      if (options.permission.toLowerCase() !== 'none') {
+        throw new Error('express-security-txt: invalid permission property, must be string value "none"')
+      }
     }
 
     return true

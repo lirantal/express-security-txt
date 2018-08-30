@@ -75,3 +75,17 @@ test('formats successfully with policy, hiring and signature fields', () => {
     'Hiring: http://example.com/hiring.txt'
   )
 })
+
+test('formats successfully with "none" not in lowercase for Permission: directive', () => {
+  const options = {
+    contact: 'email@example.com',
+    permission: 'NoNe'
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    'Contact: email@example.com\n' +
+    'Permission: NoNe'
+  )
+})
