@@ -60,6 +60,10 @@ class middleware {
       policySetting['Hiring'] = options.hiring
     }
 
+    if (options.permission) {
+      policySetting['Permission'] = options.permission
+    }
+
     const tmpPolicyArray = []
     for (const [field, value] of Object.entries(policySetting)) {
       if (typeof value === 'object') {
@@ -114,6 +118,10 @@ class middleware {
 
     if (options.hiring && typeof options.hiring !== 'string') {
       throw new Error('express-security-txt: invalid hiring property, expecting string in options')
+    }
+
+    if (options.permission && options.permission !== 'none') {
+      throw new Error('express-security-txt: invalid permission property, expecting string value "none" in options')
     }
 
     return true
