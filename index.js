@@ -95,7 +95,7 @@ class middleware {
         throw new Error('express-security-txt: invalid encyprtion property, expecting string')
       }
 
-      if (options.encryption.toLowerCase().substr(0, 8) !== 'https://') {
+      if (options.encryption.toLowerCase().substr(0, 7) === 'http://') {
         throw new Error('express-security-txt: invalid encyprtion property, must be provided as HTTPS uri')
       }
     }
