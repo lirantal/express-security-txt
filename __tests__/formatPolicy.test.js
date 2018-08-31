@@ -4,7 +4,8 @@ test('formats successfully with correct fields (singular contact field)', () => 
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    acknowledgement: 'thank you'
+    acknowledgement: 'thank you',
+    permission: 'none'
   }
 
   const res = securityTxt.formatSecurityPolicy(options)
@@ -12,7 +13,8 @@ test('formats successfully with correct fields (singular contact field)', () => 
   expect(res).toBe(
     'Contact: email@example.com\n' +
     'Encryption: https://www.mykey.com/pgp-key.txt\n' +
-    'Acknowledgement: thank you'
+    'Acknowledgement: thank you\n' +
+    'Permission: none'
   )
 })
 
@@ -71,5 +73,19 @@ test('formats successfully with policy, hiring and signature fields', () => {
     'Signature: http://example.com/.well-known/signature.txt.sig\n' +
     'Policy: http://example.com/policy.txt\n' +
     'Hiring: http://example.com/hiring.txt'
+  )
+})
+
+test('formats successfully with "none" not in lowercase for Permission: directive', () => {
+  const options = {
+    contact: 'email@example.com',
+    permission: 'NoNe'
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    'Contact: email@example.com\n' +
+    'Permission: NoNe'
   )
 })

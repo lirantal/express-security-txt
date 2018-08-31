@@ -60,6 +60,10 @@ class middleware {
       policySetting['Hiring'] = options.hiring
     }
 
+    if (options.permission) {
+      policySetting['Permission'] = options.permission
+    }
+
     const tmpPolicyArray = []
     for (const [field, value] of Object.entries(policySetting)) {
       if (typeof value === 'object') {
@@ -95,7 +99,7 @@ class middleware {
         throw new Error('express-security-txt: invalid encyprtion property, expecting string')
       }
 
-      if (options.encryption.toLowerCase().substr(0, 8) !== 'https://') {
+      if (options.encryption.toLowerCase().substr(0, 7) === 'http://') {
         throw new Error('express-security-txt: invalid encyprtion property, must be provided as HTTPS uri')
       }
     }
@@ -114,6 +118,16 @@ class middleware {
 
     if (options.hiring && typeof options.hiring !== 'string') {
       throw new Error('express-security-txt: invalid hiring property, expecting string in options')
+    }
+
+    if (options.permission) {
+      if (typeof options.permission !== 'string') {
+        throw new Error('express-security-txt: invalid permission property, expecting string in options')
+      }
+
+      if (options.permission.toLowerCase() !== 'none') {
+        throw new Error('express-security-txt: invalid permission property, must be string value "none"')
+      }
     }
 
     return true

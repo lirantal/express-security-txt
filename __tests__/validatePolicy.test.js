@@ -33,13 +33,22 @@ test('validate fails when no contact property provided', () => {
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
 
-test('validate fails when encryption property is used without https', () => {
+test('validate fails when encryption property is used with insecure http', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'http://www.mykey.com/pgp-key.txt'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate successfully when encryption property is used with dns scheme', () => {
+  const options = {
+    contact: 'email@example.com',
+    encryption: 'dns:abc'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
 })
 
 test('validate fails when encryption property is not a string', () => {
@@ -83,6 +92,24 @@ test('validate fails when hiring property is not a string', () => {
   const options = {
     contact: 'email@example.com',
     hiring: {}
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate fails when permission property is not a string', () => {
+  const options = {
+    contact: 'email@example.com',
+    permission: {}
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate fails when permission property is not "none"', () => {
+  const options = {
+    contact: 'email@example.com',
+    permission: 'notnone'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
