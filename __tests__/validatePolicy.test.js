@@ -96,3 +96,21 @@ test('validate fails when hiring property is not a string', () => {
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
+
+test('validate fails when permission property is not a string', () => {
+  const options = {
+    contact: 'email@example.com',
+    permission: {}
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate fails when permission property is not "none"', () => {
+  const options = {
+    contact: 'email@example.com',
+    permission: 'notnone'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
