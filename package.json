@@ -90,6 +90,7 @@
     }
   },
   "dependencies": {
+    "joi": "^13.6.0",
     "semantic-release": "^15.0.0"
   },
   "release": {

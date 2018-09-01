@@ -51,7 +51,7 @@ test('validate successfully when encryption property is used with dns scheme', (
   expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
 })
 
-test('validate fails when encryption property is not a string', () => {
+test('validate fails when encryption property is not a string or array', () => {
   const options = {
     contact: 'email@example.com',
     encryption: {}
@@ -60,7 +60,7 @@ test('validate fails when encryption property is not a string', () => {
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
 
-test('validate fails when acknowledgement property is not a string', () => {
+test('validate fails when acknowledgement property is not a string or array', () => {
   const options = {
     contact: 'email@example.com',
     encryption: '',
@@ -110,6 +110,28 @@ test('validate fails when permission property is not "none"', () => {
   const options = {
     contact: 'email@example.com',
     permission: 'notnone'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate successfully when providing arrays', () => {
+  const options = {
+    contact: ['a', 'b', 'c'],
+    acknowledgement: ['a', 'b', 'c'],
+    policy: ['a', 'b', 'c'],
+    hiring: ['a', 'b', 'c'],
+    encryption: ['a', 'b', 'c']
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('validate fails when providing arrays for signature/permission', () => {
+  const options = {
+    contact: 'abc',
+    signature: ['a', 'b', 'c'],
+    permission: ['none']
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
