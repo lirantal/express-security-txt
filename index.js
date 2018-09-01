@@ -36,11 +36,7 @@ class middleware {
     let policySettingText = ''
     const policySetting = []
 
-    if (typeof options.contact === 'string') {
-      policySetting['Contact'] = [options.contact]
-    } else {
-      policySetting['Contact'] = options.contact
-    }
+    policySetting['Contact'] = options.contact
 
     if (options.encryption) {
       policySetting['Encryption'] = options.encryption
@@ -90,7 +86,7 @@ class middleware {
   static validatePolicyFields (options) {
     const array = Joi.array().single()
     const string = Joi.string()
-    
+
     const schema = Joi.object().keys({
       acknowledgement: array.items(string),
       contact: array.required().items(string.required()),
@@ -99,14 +95,14 @@ class middleware {
       policy: array.items(string),
       hiring: array.items(string),
       signature: string
-    })
+    }).label('options').required()
 
     const result = Joi.validate(options, schema)
-    
+
     if (result.error) {
       throw new Error(result.error)
     }
-    
+
     return true
   }
 }
