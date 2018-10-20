@@ -1,0 +1,5 @@
+Contact: https://hackerone.com/nodejs-ecosystem
+# Please specify the module name (express-security-txt) when emailing
+Contact: mailto:security-ecosystem@nodejs.org
+Policy: https://github.com/lirantal/express-security-txt/blob/master/SECURITY.md
+Policy: https://github.com/nodejs/security-wg/blob/master/processes/third_party_vuln_process.md
