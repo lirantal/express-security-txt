@@ -18,7 +18,7 @@
   "author": "Liran Tal",
   "license": "MIT",
   "devDependencies": {
-    "commitizen": "^2.9.5",
+    "commitizen": "^3.0.0",
     "cz-conventional-changelog": "^2.1.0",
     "docco": "^0.8.0",
     "doxdox": "^2.0.1",
@@ -90,6 +90,7 @@
     }
   },
   "dependencies": {
+    "joi": "^14.0.0",
     "semantic-release": "^15.0.0"
   },
   "release": {

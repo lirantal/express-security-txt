@@ -1,5 +1,7 @@
 'use strict'
 
+const Joi = require('joi')
+
 class middleware {
   /**
    * creates an express middleware to respond with a compatible security.txt
@@ -14,7 +16,7 @@ class middleware {
       // Only handle requests for our intended use
       if ((req.path === '/security.txt' || req.path === '/.well-known/security.txt') &&
           req.method.toLowerCase() === 'get') {
-        return res.status(200).send(securityPolicy)
+        return res.status(200).header('Content-Type', 'text/plain').send(securityPolicy)
       }
 
       return next()
@@ -34,11 +36,7 @@ class middleware {
     let policySettingText = ''
     const policySetting = []
 
-    if (typeof options.contact === 'string') {
-      policySetting['Contact'] = [options.contact]
-    } else {
-      policySetting['Contact'] = options.contact
-    }
+    policySetting['Contact'] = options.contact
 
     if (options.encryption) {
       policySetting['Encryption'] = options.encryption
@@ -58,6 +56,10 @@ class middleware {
 
     if (options.hiring) {
       policySetting['Hiring'] = options.hiring
+    }
+
+    if (options.permission) {
+      policySetting['Permission'] = options.permission
     }
 
     const tmpPolicyArray = []
@@ -82,38 +84,23 @@ class middleware {
    * @return {Boolean}        throws an error or returns true
    */
   static validatePolicyFields (options) {
-    if (typeof options !== 'object') {
-      throw new Error('express-security-txt: middleware requires an options object')
-    }
+    const array = Joi.array().single()
+    const string = Joi.string()
 
-    if (!options.contact) {
-      throw new Error('express-security-txt: need to specify a contact property in options')
-    }
+    const schema = Joi.object().keys({
+      acknowledgement: array.items(string),
+      contact: array.required().items(string.required()),
+      permission: string.only('none').insensitive(),
+      encryption: array.items(string.regex(/^(?!http:)/i)),
+      policy: array.items(string),
+      hiring: array.items(string),
+      signature: string
+    }).label('options').required()
 
-    if (options.encryption) {
-      if (typeof options.encryption !== 'string') {
-        throw new Error('express-security-txt: invalid encyprtion property, expecting string')
-      }
+    const result = Joi.validate(options, schema)
 
-      if (options.encryption.toLowerCase().substr(0, 8) !== 'https://') {
-        throw new Error('express-security-txt: invalid encyprtion property, must be provided as HTTPS uri')
-      }
-    }
-
-    if (options.acknowledgement && typeof options.acknowledgement !== 'string') {
-      throw new Error('express-security-txt: invalid acknowledgement property, expecting string in options')
-    }
-
-    if (options.signature && typeof options.signature !== 'string') {
-      throw new Error('express-security-txt: invalid signature property, expecting string in options')
-    }
-
-    if (options.policy && typeof options.policy !== 'string') {
-      throw new Error('express-security-txt: invalid policy property, expecting string in options')
-    }
-
-    if (options.hiring && typeof options.hiring !== 'string') {
-      throw new Error('express-security-txt: invalid hiring property, expecting string in options')
+    if (result.error) {
+      throw new Error(result.error)
     }
 
     return true

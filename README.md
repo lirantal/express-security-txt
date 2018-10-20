@@ -56,12 +56,6 @@ Project linting:
 yarn run lint
 ```
 
-## Coverage
-
-```bash
-yarn run test:coverage
-```
-
 ## Contributing
 
 ### Commit Guidelines
