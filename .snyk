@@ -1,0 +1,30 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.12.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:hoek:20180212':
+    - semantic-release > @semantic-release/npm > npm > npm-lifecycle > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > node-gyp > request > hawk > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > npm-lifecycle > node-gyp > request > hawk > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > npm-lifecycle > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > boom > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > npm-lifecycle > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > sntp > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
+    - semantic-release > @semantic-release/npm > npm > libcipm > npm-lifecycle > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2018-08-05T02:22:32.651Z'
