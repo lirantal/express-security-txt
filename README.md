@@ -35,7 +35,6 @@ const securityTxt = require('express-security-txt')
 
 const options = {
   contact: 'email@example.com',
-  disclosure: 'full',
   encryption: 'https://www.mykey.com/pgp-key.txt',
   acknowledgement: 'thank you'
 }
@@ -55,12 +54,6 @@ Project linting:
 
 ```bash
 yarn run lint
-```
-
-## Coverage
-
-```bash
-yarn run test:coverage
 ```
 
 ## Contributing

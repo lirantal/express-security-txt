@@ -3,7 +3,6 @@ const securityTxt = require('../index')
 test('validate doesnt throw an error on provided fields', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
     encryption: 'https://www.mykey.com/pgp-key.txt',
     acknowledgement: 'thank you'
   }
@@ -14,20 +13,10 @@ test('validate doesnt throw an error on provided fields', () => {
 
 test('validate successfully when only mandatory properties provided', () => {
   const options = {
-    contact: 'email@example.com',
-    disclosure: 'full'
+    contact: 'email@example.com'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
-})
-
-test('validate fails when disclosure is non-standard', () => {
-  const options = {
-    contact: 'email@example.com',
-    disclosure: 'abc'
-  }
-
-  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
 
 test('validate fails when options is not an object', () => {
@@ -38,46 +27,42 @@ test('validate fails when options is not an object', () => {
 
 test('validate fails when no contact property provided', () => {
   const options = {
-    disclosure: 'full',
     encryption: 'https://www.mykey.com/pgp-key.txt'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
 
-test('validate fails when no disclosure property provided', () => {
+test('validate fails when encryption property is used with insecure http', () => {
   const options = {
     contact: 'email@example.com',
-    encryption: 'https://www.mykey.com/pgp-key.txt'
-  }
-
-  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
-})
-
-test('validate fails when encryption property is used without https', () => {
-  const options = {
-    contact: 'email@example.com',
-    disclosure: 'full',
     encryption: 'http://www.mykey.com/pgp-key.txt'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
 
-test('validate fails when encryption property is not a string', () => {
+test('validate successfully when encryption property is used with dns scheme', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
+    encryption: 'dns:abc'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('validate fails when encryption property is not a string or array', () => {
+  const options = {
+    contact: 'email@example.com',
     encryption: {}
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
 
-test('validate fails when acknowledgement property is not a string', () => {
+test('validate fails when acknowledgement property is not a string or array', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
     encryption: '',
     acknowledgement: {}
   }
@@ -88,7 +73,6 @@ test('validate fails when acknowledgement property is not a string', () => {
 test('validate fails when policy property is not a string', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
     policy: {}
   }
 
@@ -98,7 +82,6 @@ test('validate fails when policy property is not a string', () => {
 test('validate fails when signature property is not a string', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
     signature: {}
   }
 
@@ -108,8 +91,47 @@ test('validate fails when signature property is not a string', () => {
 test('validate fails when hiring property is not a string', () => {
   const options = {
     contact: 'email@example.com',
-    disclosure: 'full',
     hiring: {}
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate fails when permission property is not a string', () => {
+  const options = {
+    contact: 'email@example.com',
+    permission: {}
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate fails when permission property is not "none"', () => {
+  const options = {
+    contact: 'email@example.com',
+    permission: 'notnone'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate successfully when providing arrays', () => {
+  const options = {
+    contact: ['a', 'b', 'c'],
+    acknowledgement: ['a', 'b', 'c'],
+    policy: ['a', 'b', 'c'],
+    hiring: ['a', 'b', 'c'],
+    encryption: ['a', 'b', 'c']
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('validate fails when providing arrays for signature/permission', () => {
+  const options = {
+    contact: 'abc',
+    signature: ['a', 'b', 'c'],
+    permission: ['none']
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
