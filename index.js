@@ -69,11 +69,11 @@ class middleware {
       }
 
       value.forEach(valueOption => {
-        tmpPolicyArray.push(`${field}: ${valueOption}`)
+        tmpPolicyArray.push(`${field}: ${valueOption}\n`)
       })
     }
 
-    policySettingText = tmpPolicyArray.join('\n')
+    policySettingText = tmpPolicyArray.join('')
     return policySettingText
   }
 
