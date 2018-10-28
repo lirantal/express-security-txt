@@ -63,14 +63,14 @@ class middleware {
     }
 
     const tmpPolicyArray = []
-    for (const [field, value] of Object.entries(policySetting)) {
-      if (typeof value === 'object') {
-        value.forEach(valueOption => {
-          tmpPolicyArray.push(`${field}: ${valueOption}`)
-        })
-      } else {
-        tmpPolicyArray.push(`${field}: ${value}`)
+    for (let [field, value] of Object.entries(policySetting)) {
+      if (typeof value !== 'object') {
+        value = [ value ]
       }
+
+      value.forEach(valueOption => {
+        tmpPolicyArray.push(`${field}: ${valueOption}`)
+      })
     }
 
     policySettingText = tmpPolicyArray.join('\n')
