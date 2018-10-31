@@ -34,6 +34,20 @@ class middleware {
     // Before applying formatting let's validate the options
     this.validatePolicyFields(options)
 
+    const asComment = comment => {
+      const flatten = (a, b) => a.concat(b)
+
+      if(!Array.isArray(comment)) {
+        comment = [ comment ]
+      }
+
+      return comment
+                    .map(n => n.split`\n`)
+                    .reduce(flatten, [])
+                    .map(n => `# ${n}\n`)
+                    .join``
+    }
+
     let policySettingText = ''
 
     const tmpPolicyArray = []
@@ -55,6 +69,14 @@ class middleware {
       })
     }
 
+    if(typeof options._prefixComment !== 'undefined') {
+      tmpPolicyArray.unshift(asComment(options._prefixComment))
+    }
+
+    if(typeof options._postfixComment !== 'undefined') {
+      tmpPolicyArray.push(asComment(options._postfixComment))
+    }
+
     policySettingText = tmpPolicyArray.join('')
     return policySettingText
   }
@@ -70,13 +92,15 @@ class middleware {
     const string = Joi.string()
 
     const schema = Joi.object().keys({
+      _prefixComment: string,
       acknowledgement: array.items(string),
       contact: array.required().items(string.required()),
       permission: string.only('none').insensitive(),
       encryption: array.items(string.regex(/^(?!http:)/i)),
       policy: array.items(string),
       hiring: array.items(string),
-      signature: string
+      signature: string,
+      _postfixComment: string
     }).label('options').required()
 
     const result = Joi.validate(options, schema)
