@@ -1,6 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
+const DIRECTIVES = ['Contact', 'Encryption', 'Acknowledgement', 'Signature', 'Policy', 'Hiring', 'Permission']
 
 class middleware {
   /**
@@ -34,42 +35,23 @@ class middleware {
     this.validatePolicyFields(options)
 
     let policySettingText = ''
-    const policySetting = []
-
-    policySetting['Contact'] = options.contact
-
-    if (options.encryption) {
-      policySetting['Encryption'] = options.encryption
-    }
-
-    if (options.acknowledgement) {
-      policySetting['Acknowledgement'] = options.acknowledgement
-    }
-
-    if (options.signature) {
-      policySetting['Signature'] = options.signature
-    }
-
-    if (options.policy) {
-      policySetting['Policy'] = options.policy
-    }
-
-    if (options.hiring) {
-      policySetting['Hiring'] = options.hiring
-    }
-
-    if (options.permission) {
-      policySetting['Permission'] = options.permission
-    }
 
     const tmpPolicyArray = []
-    for (let [field, value] of Object.entries(policySetting)) {
+    for (let directive of DIRECTIVES) {
+      const key = this.camelCase(directive)
+
+      if(!options.hasOwnProperty(key)) {
+        continue
+      }
+
+      let value = options[key]
+
       if (typeof value !== 'object') {
         value = [ value ]
       }
 
       value.forEach(valueOption => {
-        tmpPolicyArray.push(`${field}: ${valueOption}\n`)
+        tmpPolicyArray.push(`${directive}: ${valueOption}\n`)
       })
     }
 
@@ -104,6 +86,22 @@ class middleware {
     }
 
     return true
+  }
+
+  /**
+   * Converts a security.txt directive like 'Contact'
+   * to the camelCase field name like 'contact'
+   *
+   * We assume that the contains a sequence of capitalised
+   * words which have been strung together with hyphens.
+   *
+   * @param {string} directive - The name of the security.txt directive
+   * @return {strng} The camelCase version of the directive
+   */
+  static camelCase(directive) {   
+    return directive.split('-')
+                    .map((word, isNotFirst) => isNotFirst ? word : word.toLowerCase())
+                    .join('')
   }
 }
 
