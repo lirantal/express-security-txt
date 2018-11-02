@@ -44,7 +44,7 @@ class middleware {
         continue
       }
 
-      let value = options[key]
+      let value = options[key] // eslint-disable-line security/detect-object-injection
 
       if (typeof value !== 'object') {
         value = [ value ]
