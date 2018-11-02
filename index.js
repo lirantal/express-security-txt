@@ -40,7 +40,7 @@ class middleware {
     for (let directive of DIRECTIVES) {
       const key = this.camelCase(directive)
 
-      if(!options.hasOwnProperty(key)) {
+      if (!options.hasOwnProperty(key)) {
         continue
       }
 
@@ -98,10 +98,8 @@ class middleware {
    * @param {string} directive - The name of the security.txt directive
    * @return {strng} The camelCase version of the directive
    */
-  static camelCase(directive) {   
-    return directive.split('-')
-                    .map((word, isNotFirst) => isNotFirst ? word : word.toLowerCase())
-                    .join('')
+  static camelCase (directive) {
+    return directive.split('-').map((word, isNotFirst) => isNotFirst ? word : word.toLowerCase()).join('')
   }
 }
 
