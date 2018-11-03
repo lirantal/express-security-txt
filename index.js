@@ -34,6 +34,7 @@ class middleware {
     // Before applying formatting let's validate the options
     this.validatePolicyFields(options)
 
+
     const asComment = comment => {
       const flatten = (a, b) => a.concat(b)
 
@@ -154,7 +155,7 @@ class middleware {
    * Converts a security.txt directive like 'Contact'
    * to the camelCase field name like 'contact'
    *
-   * We assume that the contains a sequence of capitalised
+   * We assume that the directive is a sequence of capitalised
    * words which have been strung together with hyphens.
    *
    * @param {string} directive - The name of the security.txt directive
