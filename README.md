@@ -41,7 +41,6 @@ const options = {
 
 app.use(securityTxt.setup(options))
 ```
-
 ### Chaining
 
 Where allowed, you can provide multiple values for a single directive by passing an array.
