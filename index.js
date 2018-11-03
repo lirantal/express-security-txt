@@ -34,7 +34,6 @@ class middleware {
     // Before applying formatting let's validate the options
     this.validatePolicyFields(options)
 
-
     const asComment = comment => {
       const flatten = (a, b) => a.concat(b)
 
