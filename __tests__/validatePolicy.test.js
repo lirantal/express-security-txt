@@ -139,8 +139,8 @@ test('validate fails when providing arrays for signature/permission', () => {
 
 test('validate successfully when using prefix/postfix comments', () => {
   const options = {
-    _prefixComment: 'This is a prefix comment',
-    _postfixComment: 'This is a postfix comment',
+    _prefixComment: ['This is a\nprefix', 'comment'],
+    _postfixComment: 'This is a \npostfix comment',
     contact: 'mailto:security@example.com'
   }
 
@@ -151,7 +151,7 @@ test('validate successfully when using objects for comments', () => {
   const options = {
     contact: [
       {
-        comment: '...',
+        comment: ['...', '...'],
         value: 'mailto:security@example.com'
       },
       {
