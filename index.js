@@ -118,15 +118,15 @@ class middleware {
      * @param {object} [singleValue=Joi.string()] - a Joi schema to validate a single entry (e.g. of an array)
      * @param {boolean} [required=false] - whether this schema must be present
      */
-    const fieldValue = ({canBeArray = true, singleValue = string, required = false} = {}) => {
+    const fieldValue = ({ canBeArray = true, singleValue = string, required = false } = {}) => {
       let schema = Joi.alternatives()
-      
+
       schema = schema.try(singleValue)
       schema = schema.try(Joi.object().keys({
         comment: string,
         value: (canBeArray ? array.items(schema) : schema).required()
       }))
-      
+
       if (canBeArray) {
         schema = schema.try(array.items(schema))
       }
@@ -140,13 +140,13 @@ class middleware {
 
     const schema = Joi.object().keys({
       _prefixComment: string,
-      acknowledgement: fieldValue(), 
-      contact: fieldValue({required: true}),
-      permission: fieldValue({canBeArray: false, singleValue: string.only('none').insensitive()}),
-      encryption: fieldValue({singleValue: string.regex(/^(?!http:)/i)}),
+      acknowledgement: fieldValue(),
+      contact: fieldValue({ required: true }),
+      permission: fieldValue({ canBeArray: false, singleValue: string.only('none').insensitive() }),
+      encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
       policy: fieldValue(),
-      hiring: fieldValue(), 
-      signature: fieldValue({canBeArray: false}),
+      hiring: fieldValue(),
+      signature: fieldValue({ canBeArray: false }),
       _postfixComment: string
     }).label('options').required()
 
