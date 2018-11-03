@@ -89,3 +89,9 @@ test('formats successfully with "none" not in lowercase for Permission: directiv
     'Permission: NoNe\n'
   )
 })
+
+test('camelCasing works for different types of directives', () => {
+  expect(securityTxt.camelCase('Abc')).toBe('abc')
+  expect(securityTxt.camelCase('Abc-Def')).toBe('abcDef')
+  expect(securityTxt.camelCase('Abc-Def-Ghi')).toBe('abcDefGhi')
+})
