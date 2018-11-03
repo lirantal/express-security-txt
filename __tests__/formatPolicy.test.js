@@ -89,3 +89,37 @@ test('formats successfully with "none" not in lowercase for Permission: directiv
     'Permission: NoNe\n'
   )
 })
+
+test('formats successfully with comments', () => {
+  const options = {
+    contact: {
+      comment: 'b',
+      value: 'tel:+123'
+    },
+    encryption: [
+      {
+        value: 'https://a.example.com'
+      },
+      {
+        value: 'https://b.example.com',
+        comment: 'c'
+      },
+      'https://c.example.com'
+    ],
+    _prefixComment: 'a',
+    _postfixComment: 'd'
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    '# a\n' +
+    '# b\n' +
+    'Contact: tel:+123\n' +
+    'Encryption: https://a.example.com\n' +
+    '# c\n' +
+    'Encryption: https://b.example.com\n' +
+    'Encryption: https://c.example.com\n' +
+    '# d\n'
+  )
+})
