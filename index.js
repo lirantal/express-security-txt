@@ -98,6 +98,7 @@ class middleware {
   static validatePolicyFields (options) {
     const array = Joi.array().single()
     const string = Joi.string()
+    const comment = array.items(string)
 
     /**
      * A function to create a custom schema for a security.txt
@@ -113,7 +114,7 @@ class middleware {
 
       schema = schema.try(singleValue)
       schema = schema.try(Joi.object().keys({
-        comment: array.items(string),
+        comment: comment,
         value: (canBeArray ? array.items(schema) : schema).required()
       }))
 
@@ -129,7 +130,7 @@ class middleware {
     }
 
     const schema = Joi.object().keys({
-      _prefixComment: array.items(string),
+      _prefixComment: comment,
       acknowledgement: fieldValue(),
       contact: fieldValue({ required: true }),
       permission: fieldValue({ canBeArray: false, singleValue: string.only('none').insensitive() }),
@@ -137,7 +138,7 @@ class middleware {
       policy: fieldValue(),
       hiring: fieldValue(),
       signature: fieldValue({ canBeArray: false }),
-      _postfixComment: array.items(string)
+      _postfixComment: comment
     }).label('options').required()
 
     const result = Joi.validate(options, schema)
