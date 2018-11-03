@@ -102,11 +102,11 @@ test('formats successfully with comments', () => {
       },
       {
         value: 'https://b.example.com',
-        comment: 'c'
+        comment: ['c', 'h', 'i\nj']
       },
       'https://c.example.com'
     ],
-    _prefixComment: 'a',
+    _prefixComment: ['a', 'z', 'x\ny'],
     _postfixComment: 'd'
   }
 
@@ -114,10 +114,16 @@ test('formats successfully with comments', () => {
 
   expect(res).toBe(
     '# a\n' +
+    '# z\n' +
+    '# x\n' +
+    '# y\n' +
     '# b\n' +
     'Contact: tel:+123\n' +
     'Encryption: https://a.example.com\n' +
     '# c\n' +
+    '# h\n' +
+    '# i\n' +
+    '# j\n' +
     'Encryption: https://b.example.com\n' +
     'Encryption: https://c.example.com\n' +
     '# d\n'
