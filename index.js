@@ -66,14 +66,14 @@ class middleware {
 
       value.forEach(valueOption => {
         if (valueOption.hasOwnProperty('value')) {
-          if(valueOption.hasOwnProperty('comment')) {
+          if (valueOption.hasOwnProperty('comment')) {
             tmpPolicyArray.push(asComment(valueOption.comment))
           }
 
-          tmpPolicyArray.push(`${directive}: ${valueOption.value}\n`)
-        } else {
-          tmpPolicyArray.push(`${directive}: ${valueOption}\n`)
+          valueOption = valueOption.value
         }
+
+        tmpPolicyArray.push(`${directive}: ${valueOption}\n`)
       })
     }
 
