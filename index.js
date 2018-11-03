@@ -37,15 +37,15 @@ class middleware {
     const asComment = comment => {
       const flatten = (a, b) => a.concat(b)
 
-      if(!Array.isArray(comment)) {
+      if (!Array.isArray(comment)) {
         comment = [ comment ]
       }
 
       return comment
-                    .map(n => n.split`\n`)
-                    .reduce(flatten, [])
-                    .map(n => `# ${n}\n`)
-                    .join``
+        .map(n => n.split`\n`)
+        .reduce(flatten, [])
+        .map(n => `# ${n}\n`)
+        .join``
     }
 
     let policySettingText = ''
@@ -69,11 +69,11 @@ class middleware {
       })
     }
 
-    if(typeof options._prefixComment !== 'undefined') {
+    if (typeof options._prefixComment !== 'undefined') {
       tmpPolicyArray.unshift(asComment(options._prefixComment))
     }
 
-    if(typeof options._postfixComment !== 'undefined') {
+    if (typeof options._postfixComment !== 'undefined') {
       tmpPolicyArray.push(asComment(options._postfixComment))
     }
 
@@ -91,15 +91,44 @@ class middleware {
     const array = Joi.array().single()
     const string = Joi.string()
 
+    /**
+     * A function to create a custom schema for a security.txt
+     * field value.
+     *
+     * @param {object} [options={}] - requirements of this schema
+     * @param {boolean} [options.canBeArray=true] - can singleValue appear in an array
+     * @param {object} [singleValue=Joi.string()] - a Joi schema to validate a single entry (e.g. of an array)
+     * @param {boolean} [required=false] - whether this schema must be present
+     */
+    const fieldValue = ({canBeArray = true, singleValue = string, required = false} = {}) => {
+      let schema = Joi.alternatives()
+      
+      schema = schema.try(singleValue)
+      schema = schema.try(Joi.object().keys({
+        comment: string,
+        value: (canBeArray ? array.items(schema) : schema).required()
+      }))
+      
+      if (canBeArray) {
+        schema = schema.try(array.items(schema))
+      }
+
+      if (required) {
+        schema = schema.required()
+      }
+
+      return schema
+    }
+
     const schema = Joi.object().keys({
       _prefixComment: string,
-      acknowledgement: array.items(string),
-      contact: array.required().items(string.required()),
-      permission: string.only('none').insensitive(),
-      encryption: array.items(string.regex(/^(?!http:)/i)),
-      policy: array.items(string),
-      hiring: array.items(string),
-      signature: string,
+      acknowledgement: fieldValue(), 
+      contact: fieldValue({required: true}),
+      permission: fieldValue({canBeArray: false, singleValue: string.only('none').insensitive()}),
+      encryption: fieldValue({singleValue: string.regex(/^(?!http:)/i)}),
+      policy: fieldValue(),
+      hiring: fieldValue(), 
+      signature: fieldValue({canBeArray: false}),
       _postfixComment: string
     }).label('options').required()
 
