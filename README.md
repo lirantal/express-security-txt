@@ -60,7 +60,7 @@ app.use(securityTxt.setup(options))
 
 ### Comments
 
-To add a comment at the beggining or end of the security.txt file, one may use the keys `_prefixComment` and `postfixComment` respectively. If one wishes to place a comment immediately before a field, one may use an object which specifies the value of the field and the comment which must introduce it.
+To add a comment at the beggining or end of the security.txt file, one may use the keys `_prefixComment` and `_postfixComment` respectively. If one wishes to place a comment immediately before a field, one may use an object which specifies the value of the field and the comment which must come before it.
 
 ```js
 const securityTxt = require('express-security-txt')
