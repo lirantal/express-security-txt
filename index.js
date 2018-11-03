@@ -60,12 +60,20 @@ class middleware {
 
       let value = options[key] // eslint-disable-line security/detect-object-injection
 
-      if (typeof value !== 'object') {
+      if (!Array.isArray(value)) {
         value = [ value ]
       }
 
       value.forEach(valueOption => {
-        tmpPolicyArray.push(`${directive}: ${valueOption}\n`)
+        if (valueOption.hasOwnProperty('value')) {
+          if(valueOption.hasOwnProperty('comment')) {
+            tmpPolicyArray.push(asComment(valueOption.comment))
+          }
+
+          tmpPolicyArray.push(`${directive}: ${valueOption.value}\n`)
+        } else {
+          tmpPolicyArray.push(`${directive}: ${valueOption}\n`)
+        }
       })
     }
 
