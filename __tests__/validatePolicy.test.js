@@ -189,3 +189,12 @@ test('validate fails when not providing a value in comment object', () => {
   expect(() => securityTxt.validatePolicyFields(singleObject)).toThrow()
   expect(() => securityTxt.validatePolicyFields(arrayOfObjects)).toThrow()
 })
+
+test('validate fails when using a [{value: [...]}] nested array', () => {
+  const options = {
+    contact: [{ value: ['test'] }],
+    encryption: [{ value: ['test'] }]
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})

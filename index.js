@@ -112,14 +112,26 @@ class middleware {
     const fieldValue = ({ canBeArray = true, singleValue = string, required = false } = {}) => {
       let schema = Joi.alternatives()
 
+      /**
+       * A function which returns a schema for a comment object (of the form { comment: ..., value: ... })
+       *
+       * @param {boolean} [arrayAllowed=canBeArray] - Whether values can be arrays of values
+       * @return {object} - a Joi schema
+       */
+      function commentSchema (arrayAllowed = canBeArray) {
+        return Joi.object().keys({
+          comment: comment,
+          value: (arrayAllowed ? array.items(singleValue) : singleValue).required()
+        })
+      }
+
       schema = schema.try(singleValue)
-      schema = schema.try(Joi.object().keys({
-        comment: comment,
-        value: (canBeArray ? array.items(schema) : schema).required()
-      }))
+      schema = schema.try(commentSchema())
 
       if (canBeArray) {
-        schema = schema.try(array.items(schema))
+        schema = schema.try(array.items(
+          Joi.alternatives().try(singleValue).try(commentSchema(false))
+        ))
       }
 
       if (required) {
