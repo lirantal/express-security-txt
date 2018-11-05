@@ -95,3 +95,43 @@ test('camelCasing works for different types of directives', () => {
   expect(securityTxt.camelCase('Abc-Def')).toBe('abcDef')
   expect(securityTxt.camelCase('Abc-Def-Ghi')).toBe('abcDefGhi')
 })
+
+test('formats successfully with comments', () => {
+  const options = {
+    contact: {
+      comment: 'b',
+      value: 'tel:+123'
+    },
+    encryption: [
+      {
+        value: 'https://a.example.com'
+      },
+      {
+        value: 'https://b.example.com',
+        comment: ['c', 'h', 'i\nj']
+      },
+      'https://c.example.com'
+    ],
+    _prefixComment: ['a', 'z', 'x\ny'],
+    _postfixComment: 'd'
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    '# a\n' +
+    '# z\n' +
+    '# x\n' +
+    '# y\n' +
+    '# b\n' +
+    'Contact: tel:+123\n' +
+    'Encryption: https://a.example.com\n' +
+    '# c\n' +
+    '# h\n' +
+    '# i\n' +
+    '# j\n' +
+    'Encryption: https://b.example.com\n' +
+    'Encryption: https://c.example.com\n' +
+    '# d\n'
+  )
+})

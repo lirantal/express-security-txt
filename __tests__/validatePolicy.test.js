@@ -136,3 +136,65 @@ test('validate fails when providing arrays for signature/permission', () => {
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
+
+test('validate successfully when using prefix/postfix comments', () => {
+  const options = {
+    _prefixComment: ['This is a\nprefix', 'comment'],
+    _postfixComment: 'This is a \npostfix comment',
+    contact: 'mailto:security@example.com'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('validate successfully when using objects for comments', () => {
+  const options = {
+    contact: [
+      {
+        comment: ['...', '...'],
+        value: 'mailto:security@example.com'
+      },
+      {
+        value: 'tel:+123'
+      }
+    ],
+    encryption: {
+      comment: '...',
+      value: 'https://encryption.example.com'
+    }
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('validate fails when not providing a value in comment object', () => {
+  const singleObject = {
+    contact: {
+      comment: ''
+    }
+  }
+
+  const arrayOfObjects = {
+    contact: [
+      {
+        comment: '...',
+        value: 'tel:+123'
+      },
+      {
+        comment: '...'
+      }
+    ]
+  }
+
+  expect(() => securityTxt.validatePolicyFields(singleObject)).toThrow()
+  expect(() => securityTxt.validatePolicyFields(arrayOfObjects)).toThrow()
+})
+
+test('validate fails when using a [{value: [...]}] nested array', () => {
+  const options = {
+    contact: [{ value: ['test'] }],
+    encryption: [{ value: ['test'] }]
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})

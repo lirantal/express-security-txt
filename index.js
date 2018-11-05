@@ -34,6 +34,20 @@ class middleware {
     // Before applying formatting let's validate the options
     this.validatePolicyFields(options)
 
+    const asComment = comment => {
+      const flatten = (a, b) => a.concat(b)
+
+      if (!Array.isArray(comment)) {
+        comment = [ comment ]
+      }
+
+      return comment
+        .map(n => n.split`\n`)
+        .reduce(flatten, [])
+        .map(n => `# ${n}\n`)
+        .join``
+    }
+
     let policySettingText = ''
 
     const tmpPolicyArray = []
@@ -46,13 +60,29 @@ class middleware {
 
       let value = options[key] // eslint-disable-line security/detect-object-injection
 
-      if (typeof value !== 'object') {
+      if (!Array.isArray(value)) {
         value = [ value ]
       }
 
       value.forEach(valueOption => {
+        if (valueOption.hasOwnProperty('value')) {
+          if (valueOption.hasOwnProperty('comment')) {
+            tmpPolicyArray.push(asComment(valueOption.comment))
+          }
+
+          valueOption = valueOption.value
+        }
+
         tmpPolicyArray.push(`${directive}: ${valueOption}\n`)
       })
+    }
+
+    if (typeof options._prefixComment !== 'undefined') {
+      tmpPolicyArray.unshift(asComment(options._prefixComment))
+    }
+
+    if (typeof options._postfixComment !== 'undefined') {
+      tmpPolicyArray.push(asComment(options._postfixComment))
     }
 
     policySettingText = tmpPolicyArray.join('')
@@ -68,15 +98,59 @@ class middleware {
   static validatePolicyFields (options) {
     const array = Joi.array().single()
     const string = Joi.string()
+    const comment = array.items(string)
+
+    /**
+     * A function to create a custom schema for a security.txt
+     * field value.
+     *
+     * @param {object} [options={}] - requirements of this schema
+     * @param {boolean} [options.canBeArray=true] - can singleValue appear in an array
+     * @param {object} [singleValue=Joi.string()] - a Joi schema to validate a single entry (e.g. of an array)
+     * @param {boolean} [required=false] - whether this schema must be present
+     */
+    const fieldValue = ({ canBeArray = true, singleValue = string, required = false } = {}) => {
+      let schema = Joi.alternatives()
+
+      /**
+       * A function which returns a schema for a comment object (of the form { comment: ..., value: ... })
+       *
+       * @param {boolean} [arrayAllowed=canBeArray] - Whether values can be arrays of values
+       * @return {object} - a Joi schema
+       */
+      function commentSchema (arrayAllowed = canBeArray) {
+        return Joi.object().keys({
+          comment: comment,
+          value: (arrayAllowed ? array.items(singleValue) : singleValue).required()
+        })
+      }
+
+      schema = schema.try(singleValue)
+      schema = schema.try(commentSchema())
+
+      if (canBeArray) {
+        schema = schema.try(array.items(
+          Joi.alternatives().try(singleValue).try(commentSchema(false))
+        ))
+      }
+
+      if (required) {
+        schema = schema.required()
+      }
+
+      return schema
+    }
 
     const schema = Joi.object().keys({
-      acknowledgement: array.items(string),
-      contact: array.required().items(string.required()),
-      permission: string.only('none').insensitive(),
-      encryption: array.items(string.regex(/^(?!http:)/i)),
-      policy: array.items(string),
-      hiring: array.items(string),
-      signature: string
+      _prefixComment: comment,
+      acknowledgement: fieldValue(),
+      contact: fieldValue({ required: true }),
+      permission: fieldValue({ canBeArray: false, singleValue: string.only('none').insensitive() }),
+      encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
+      policy: fieldValue(),
+      hiring: fieldValue(),
+      signature: fieldValue({ canBeArray: false }),
+      _postfixComment: comment
     }).label('options').required()
 
     const result = Joi.validate(options, schema)
