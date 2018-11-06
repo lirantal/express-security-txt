@@ -1,7 +1,20 @@
 'use strict'
 
 const Joi = require('joi')
-const DIRECTIVES = ['Contact', 'Encryption', 'Acknowledgement', 'Signature', 'Policy', 'Hiring', 'Permission']
+const DIRECTIVES = ['Contact', 'Encryption', 'Acknowledgments', 'Signature', 'Policy', 'Hiring', 'Permission']
+
+/**
+ * @TODO Fully remove outdated spelling in breaking changes
+ *
+ * An object mapping deprecated keys to their newer alternatives.
+ * Ensures you can't use both spellings, and automatically triggers
+ * a `console.warn` to encourage the user to make the switch.
+ *
+ * @const
+ */
+const DEPRECATIONS = {
+  Acknowledgement: 'Acknowledgments'
+}
 
 class middleware {
   /**
@@ -141,9 +154,9 @@ class middleware {
       return schema
     }
 
-    const schema = Joi.object().keys({
+    let uncompiledSchema = {
       _prefixComment: comment,
-      acknowledgement: fieldValue(),
+      acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
       permission: fieldValue({ canBeArray: false, singleValue: string.only('none').insensitive() }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
@@ -151,7 +164,17 @@ class middleware {
       hiring: fieldValue(),
       signature: fieldValue({ canBeArray: false }),
       _postfixComment: comment
-    }).label('options').required()
+    }
+
+    let schema = Joi.object().keys(uncompiledSchema).label('options').required()
+
+    Object.entries(DEPRECATIONS).forEach(([deprecated, notDeprecated]) => {
+      const [camelDep, camelNotDep] = [deprecated, notDeprecated].map(this.camelCase)
+
+      schema = schema.keys({
+        [camelDep]: uncompiledSchema[camelNotDep] // copy the schema for non-deprecated into deprecated
+      }).nand(camelDep, camelNotDep) // disallow using both keys at once
+    })
 
     const result = Joi.validate(options, schema)
 
