@@ -4,7 +4,7 @@ test('correctly handle middleware setup for security policy', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    acknowledgement: 'thank you'
+    acknowledgments: 'thank you'
   }
 
   const middleware = securityTxtMiddleware.setup(options)
@@ -37,7 +37,7 @@ test('skip middleware if method is not GET', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    acknowledgement: 'thank you'
+    acknowledgments: 'thank you'
   }
 
   const middleware = securityTxtMiddleware.setup(options)
@@ -58,7 +58,7 @@ test('skip middleware if path is not /security.txt', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    acknowledgement: 'thank you'
+    acknowledgments: 'thank you'
   }
 
   const middleware = securityTxtMiddleware.setup(options)

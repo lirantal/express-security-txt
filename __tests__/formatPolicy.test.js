@@ -4,7 +4,7 @@ test('formats successfully with correct fields (singular contact field)', () => 
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    acknowledgement: 'thank you',
+    acknowledgments: 'thank you',
     permission: 'none'
   }
 
@@ -13,7 +13,7 @@ test('formats successfully with correct fields (singular contact field)', () => 
   expect(res).toBe(
     'Contact: email@example.com\n' +
     'Encryption: https://www.mykey.com/pgp-key.txt\n' +
-    'Acknowledgement: thank you\n' +
+    'Acknowledgments: thank you\n' +
     'Permission: none\n'
   )
 })
@@ -35,7 +35,7 @@ test('formats successfully with multiple contact options and values in-tact', ()
   const website = 'http://www.website.com'
   const phone = '+972+8+6173651'
   const encryption = 'https://www.mykey.com/pgp-key.txt'
-  const acknowledgement = 'http://my.website.com'
+  const acknowledgments = 'http://my.website.com'
 
   const options = {
     contact: [
@@ -43,8 +43,8 @@ test('formats successfully with multiple contact options and values in-tact', ()
       website,
       phone
     ],
-    encryption: encryption,
-    acknowledgement: acknowledgement
+    encryption,
+    acknowledgments
   }
 
   const res = securityTxt.formatSecurityPolicy(options)
@@ -54,7 +54,7 @@ test('formats successfully with multiple contact options and values in-tact', ()
     `Contact: ${website}\n` +
     `Contact: ${phone}\n` +
     `Encryption: ${encryption}\n` +
-    `Acknowledgement: ${acknowledgement}\n`
+    `Acknowledgments: ${acknowledgments}\n`
   )
 })
 
@@ -133,5 +133,19 @@ test('formats successfully with comments', () => {
     'Encryption: https://b.example.com\n' +
     'Encryption: https://c.example.com\n' +
     '# d\n'
+  )
+})
+
+test('uses new spelling with deprecated keys', () => {
+  const options = {
+    contact: 'tel:+123',
+    acknowledgement: 'https://example.com'
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    'Contact: tel:+123\n' +
+    'Acknowledgments: https://example.com\n'
   )
 })
