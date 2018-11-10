@@ -73,6 +73,7 @@ class middleware {
      * @param {string} b - The correct spelling, which may or may not have a deprecated spelling
      * @return {array} An array with both the correct spellings and the deprecated spellings, with order conserved.
      */
+    // eslint-disable-next-line security/detect-object-injection
     const addDeprecatedSpellings = (a, b) => DEPRECATIONS.hasOwnProperty(b) ? a.concat(b, DEPRECATIONS[b]) : a.concat(b)
 
     /**
@@ -199,6 +200,7 @@ class middleware {
       const [camelDep, camelNotDep] = [deprecated, notDeprecated].map(this.camelCase)
 
       schema = schema.keys({
+        // eslint-disable-next-line security/detect-object-injection
         [camelDep]: uncompiledSchema[camelNotDep] // copy the schema for non-deprecated into deprecated
       })
 
