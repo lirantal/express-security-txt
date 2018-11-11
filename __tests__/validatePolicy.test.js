@@ -4,7 +4,7 @@ test('validate doesnt throw an error on provided fields', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    acknowledgement: 'thank you'
+    acknowledgments: 'thank you'
   }
 
   const res = securityTxt.validatePolicyFields(options)
@@ -60,11 +60,11 @@ test('validate fails when encryption property is not a string or array', () => {
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
 
-test('validate fails when acknowledgement property is not a string or array', () => {
+test('validate fails when acknowledgments property is not a string or array', () => {
   const options = {
     contact: 'email@example.com',
     encryption: '',
-    acknowledgement: {}
+    acknowledgments: {}
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
@@ -118,7 +118,7 @@ test('validate fails when permission property is not "none"', () => {
 test('validate successfully when providing arrays', () => {
   const options = {
     contact: ['a', 'b', 'c'],
-    acknowledgement: ['a', 'b', 'c'],
+    acknowledgments: ['a', 'b', 'c'],
     policy: ['a', 'b', 'c'],
     hiring: ['a', 'b', 'c'],
     encryption: ['a', 'b', 'c']
@@ -194,6 +194,25 @@ test('validate fails when using a [{value: [...]}] nested array', () => {
   const options = {
     contact: [{ value: ['test'] }],
     encryption: [{ value: ['test'] }]
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('deprecated spelling is allowed', () => {
+  const options = {
+    contact: '...',
+    acknowledgement: '...' // deprecated spelling
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('using both deprecated spelling and new spelling throws', () => {
+  const options = {
+    contact: '...',
+    acknowledgments: '...',
+    acknowledgement: '...'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
