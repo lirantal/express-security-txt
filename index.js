@@ -1,7 +1,20 @@
 'use strict'
 
 const Joi = require('joi')
-const DIRECTIVES = ['Contact', 'Encryption', 'Acknowledgement', 'Signature', 'Policy', 'Hiring', 'Permission']
+const DIRECTIVES = ['Contact', 'Encryption', 'Acknowledgments', 'Signature', 'Policy', 'Hiring', 'Permission']
+
+/**
+ * @TODO Fully remove outdated spelling in breaking changes
+ *
+ * An object mapping newer alternatives to their deprecated keys.
+ * Ensures you can't use both spellings, and automatically triggers
+ * a `console.warn` to encourage the user to make the switch.
+ *
+ * @const
+ */
+const DEPRECATIONS = {
+  Acknowledgments: 'Acknowledgement'
+}
 
 class middleware {
   /**
@@ -51,14 +64,41 @@ class middleware {
     let policySettingText = ''
 
     const tmpPolicyArray = []
-    for (let directive of DIRECTIVES) {
+
+    /**
+     * A reducer to insert the deprecated spellings of directives
+     * directly after their correct spellings.
+     *
+     * @param {array} a - The accumulator, should be initialised with an empty array
+     * @param {string} b - The correct spelling, which may or may not have a deprecated spelling
+     * @return {array} An array with both the correct spellings and the deprecated spellings, with order conserved.
+     */
+    // eslint-disable-next-line security/detect-object-injection
+    const addDeprecatedSpellings = (a, b) => DEPRECATIONS.hasOwnProperty(b) ? a.concat(b, DEPRECATIONS[b]) : a.concat(b)
+
+    /**
+     * A function to get the undeprecated spelling of a directive
+     *
+     * @param {string} directive - The (possibly deprecated) directive
+     * @return {string} The undeprecated form of the directive
+     */
+    const undeprecate = directive => Object.entries(DEPRECATIONS).reduce(
+      (a, b) => b[1] === directive ? b[0] : a
+      , directive)
+
+    for (let directive of DIRECTIVES.reduce(addDeprecatedSpellings, [])) {
       const key = this.camelCase(directive)
+      const outputDirective = undeprecate(directive)
 
       if (!options.hasOwnProperty(key)) {
         continue
       }
 
       let value = options[key] // eslint-disable-line security/detect-object-injection
+
+      if (outputDirective !== directive && typeof value !== 'undefined') {
+        console.warn('[express-security-txt]: Deprecated key: "' + key + '". Use ' + this.camelCase(outputDirective) + ' instead')
+      }
 
       if (!Array.isArray(value)) {
         value = [ value ]
@@ -73,7 +113,7 @@ class middleware {
           valueOption = valueOption.value
         }
 
-        tmpPolicyArray.push(`${directive}: ${valueOption}\n`)
+        tmpPolicyArray.push(`${outputDirective}: ${valueOption}\n`)
       })
     }
 
@@ -141,9 +181,9 @@ class middleware {
       return schema
     }
 
-    const schema = Joi.object().keys({
+    let uncompiledSchema = {
       _prefixComment: comment,
-      acknowledgement: fieldValue(),
+      acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
       permission: fieldValue({ canBeArray: false, singleValue: string.only('none').insensitive() }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
@@ -151,7 +191,21 @@ class middleware {
       hiring: fieldValue(),
       signature: fieldValue({ canBeArray: false }),
       _postfixComment: comment
-    }).label('options').required()
+    }
+
+    let schema = Joi.object().keys(uncompiledSchema).label('options').required()
+
+    // Deprecate fields which have changed in the specification
+    Object.entries(DEPRECATIONS).forEach(([notDeprecated, deprecated]) => {
+      const [camelDep, camelNotDep] = [deprecated, notDeprecated].map(this.camelCase)
+
+      schema = schema.keys({
+        // eslint-disable-next-line security/detect-object-injection
+        [camelDep]: uncompiledSchema[camelNotDep] // copy the schema for non-deprecated into deprecated
+      })
+
+      schema = schema.nand(camelDep, camelNotDep) // disallow using both keys at once
+    })
 
     const result = Joi.validate(options, schema)
 
