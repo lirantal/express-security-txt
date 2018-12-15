@@ -142,10 +142,14 @@ test('uses new spelling with deprecated keys', () => {
     acknowledgement: 'https://example.com'
   }
 
+  global.console.warn = jest.fn()
+
   const res = securityTxt.formatSecurityPolicy(options)
 
   expect(res).toBe(
     'Contact: tel:+123\n' +
     'Acknowledgments: https://example.com\n'
   )
+
+  expect(global.console.warn).toHaveBeenCalled()
 })
