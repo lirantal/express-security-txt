@@ -217,3 +217,18 @@ test('using both deprecated spelling and new spelling throws', () => {
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
 })
+
+test('validate successfully for the preferredLanguages key', () => {
+  const optionsWithArray = {
+    contact: '...',
+    preferredLanguages: ['en', 'es']
+  }
+
+  const optionsWithString = {
+    contact: '...',
+    preferredLanguages: 'ru'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(optionsWithArray)).not.toThrow()
+  expect(() => securityTxt.validatePolicyFields(optionsWithString)).not.toThrow()
+})
