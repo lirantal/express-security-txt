@@ -195,7 +195,7 @@ class middleware {
       contact: fieldValue({ required: true }),
       permission: fieldValue({ canBeArray: false, singleValue: string.only('none').insensitive() }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
-      preferredLanguages: fieldValue(),
+      preferredLanguages: fieldValue({ canBeArray: false, singleValue: array.items(string)),
       policy: fieldValue(),
       hiring: fieldValue(),
       signature: fieldValue({ canBeArray: false }),

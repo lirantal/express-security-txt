@@ -229,6 +229,23 @@ test('validate successfully for the preferredLanguages key', () => {
     preferredLanguages: 'ru'
   }
 
+  const optionsWithComment = {
+    contact: '...',
+    preferredLanguages: { comment: 'I am fluent in these', value: ['en', 'ru'] }
+  }
+
   expect(() => securityTxt.validatePolicyFields(optionsWithArray)).not.toThrow()
   expect(() => securityTxt.validatePolicyFields(optionsWithString)).not.toThrow()
+  expect(() => securityTxt.validatePolicyFields(optionsWithComment)).not.toThrow()
+})
+
+test('validate fails if Array<object> fed to preferredLanguages', () => {
+  const options = {
+    contact: '...',
+    preferredLanguages: [
+      { comment: '...', value: 'en' }
+    ]
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options).toThrow())
 })
