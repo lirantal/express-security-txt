@@ -135,3 +135,31 @@ test('uses new spelling with deprecated keys', () => {
 
   expect(global.console.warn).toHaveBeenCalled()
 })
+
+test('preferredLanguages directive works with multiple values', () => {
+  const options = {
+    contact: 'mailto:security@example.com',
+    preferredLanguages: ['en', 'ru', 'es']
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    'Contact: mailto:security@example.com\n' +
+    'Preferred-Languages: en, ru, es\n'
+  )
+})
+
+test('preferredLanguages directive works with one value only', () => {
+  const options = {
+    contact: 'mailto:security@example.com',
+    preferredLanguages: 'en'
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    'Contact: mailto:security@example.com\n' +
+    'Preferred-Languages: en\n'
+  )
+})

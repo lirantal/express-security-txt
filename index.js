@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const DIRECTIVES = ['Contact', 'Encryption', 'Canonical', 'Acknowledgments', 'Policy', 'Hiring']
+const DIRECTIVES = ['Contact', 'Encryption', 'Canonical', 'Acknowledgments', 'Preferred-Languages', 'Policy', 'Hiring']
 
 /**
  * @TODO Fully remove outdated spelling in breaking changes
@@ -104,6 +104,14 @@ class middleware {
         value = [ value ]
       }
 
+      // For the other fields, arrays are used to represent multiple occurences
+      // of a field. However, for the Preferred-Language: directive, an array shows
+      // a comma separated list. Convert the provided array into an array of one
+      // value: a string with commas.
+      if (outputDirective === 'Preferred-Languages') {
+        value = [ value.map(languageCode => languageCode.trim()).join(', ') ]
+      }
+
       value.forEach(valueOption => {
         if (valueOption.hasOwnProperty('value')) {
           if (valueOption.hasOwnProperty('comment')) {
@@ -186,6 +194,7 @@ class middleware {
       acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
+      preferredLanguages: fieldValue({ canBeArray: false, singleValue: array.items(string) }),
       policy: fieldValue(),
       hiring: fieldValue(),
       canonical: fieldValue({ canBeArray: false }),
