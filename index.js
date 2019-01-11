@@ -131,7 +131,7 @@ class middleware {
 
   /**
    * validates a security policy object confirms with standards of security.txt
-   * reference: https://www.ietf.org/id/draft-foudil-securitytxt-00.txt
+   * reference: https://www.ietf.org/id/draft-foudil-securitytxt-04.txt
    * @param  {Object} options security policy object properties
    * @return {Boolean}        throws an error or returns true
    */
