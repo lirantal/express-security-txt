@@ -4,7 +4,8 @@ test('validate doesnt throw an error on provided fields', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    acknowledgments: 'thank you'
+    acknowledgments: 'thank you',
+    canonical: 'https://example.com/.well-known/security.txt'
   }
 
   const res = securityTxt.validatePolicyFields(options)
@@ -74,15 +75,6 @@ test('validate fails when policy property is not a string', () => {
   const options = {
     contact: 'email@example.com',
     policy: {}
-  }
-
-  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
-})
-
-test('validate fails when signature property is not a string', () => {
-  const options = {
-    contact: 'email@example.com',
-    signature: {}
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
@@ -185,6 +177,15 @@ test('using both deprecated spelling and new spelling throws', () => {
     contact: '...',
     acknowledgments: '...',
     acknowledgement: '...'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('passing an array for Canonical fails', () => {
+  const options = {
+    contact: '...',
+    canonical: ['...', '...']
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
