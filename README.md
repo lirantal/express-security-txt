@@ -51,7 +51,7 @@ const options = {
 
 ### Adding comments
 
-Comments can be included in the generated file. The `#` at the beggining of each line of a comment is automatically inserted by a package.
+Comments can be included in the generated file. The `#` at the beggining of each line of a comment is automatically inserted by the package.
 
 Comments at the start and end of a file can be added by using the `_prefixComment` and `_postfixComment` keys, like so:
 
