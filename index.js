@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const DIRECTIVES = ['Contact', 'Encryption', 'Acknowledgments', 'Preferred-Languages', 'Signature', 'Policy', 'Hiring', 'Permission']
+const DIRECTIVES = ['Contact', 'Encryption', 'Canonical', 'Acknowledgments', 'Preferred-Languages', 'Policy', 'Hiring']
 
 /**
  * @TODO Fully remove outdated spelling in breaking changes
@@ -193,12 +193,11 @@ class middleware {
       _prefixComment: comment,
       acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
-      permission: fieldValue({ canBeArray: false, singleValue: string.only('none').insensitive() }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
       preferredLanguages: fieldValue({ canBeArray: false, singleValue: array.items(string) }),
       policy: fieldValue(),
       hiring: fieldValue(),
-      signature: fieldValue({ canBeArray: false }),
+      canonical: fieldValue({ canBeArray: false }),
       _postfixComment: comment
     }
 
