@@ -12,10 +12,10 @@
 
 # Express Security Txt
 
-Express middleware that implements a security.txt path and policy
+Express middleware that implements a security.txt path and policy. Allows the repeating of a directive, as well as the insertion of comments.
 
 References:
-* [security.txt rfc](https://www.ietf.org/id/draft-foudil-securitytxt-00.txt)
+* [security.txt RFC](https://www.ietf.org/id/draft-foudil-securitytxt-05.txt)
 * [security.txt project on github](https://github.com/securitytxt/security-txt)
 
 ## Installation
@@ -26,96 +26,84 @@ yarn add express-security-txt
 
 ## Usage
 
-Define an `options` object with the proper fields that make up a valid
-[security.txt](https://www.ietf.org/id/draft-foudil-securitytxt-00.txt) policy,
-and use it as a middleware for an express app.
+Define an options object with the keys that make up a valid [security.txt](https://www.ietf.org/id/draft-foudil-securitytxt-05.txt) file. All the keys are in camelCase.
 
-```js
+```javascript
 const securityTxt = require('express-security-txt')
 
 const options = {
-  contact: 'mailto:email@example.com',
-  encryption: 'https://www.mykey.com/pgp-key.txt',
-  acknowledgement: 'thank you'
+  contact: 'https://example.com/security/',
+  preferredLanguages: 'en'
 }
 
 app.use(securityTxt.setup(options))
 ```
-### Chaining
 
-Where allowed, you can provide multiple values for a single directive by passing an array.
+### Passing multiple values
 
-```js
-const securityTxt = require('express-security-txt')
+Some directives allow you to specify multiple values. This package allows you to do this by passing an array:
 
+```javascript
+const options = {
+  contact: ['mailto:security@example.com', 'https://example.com/security/']
+}
+```
+
+### Adding comments
+
+Comments can be included in the generated file. The `#` at the beggining of each line of a comment is automatically inserted by the package.
+
+Comments at the start and end of a file can be added by using the `_prefixComment` and `_postfixComment` keys, like so:
+
+```javascript
+const options = {
+  _prefixComment: 'This comment will appear at the beggining of the security.txt file',
+  contact: 'mailto:security@example.com',
+  _postfixComment: 'This comment will appear at the end of the security.txt file'
+}
+```
+
+NOTE: You may include the newline character (`\n`), and the package will automatically insert the `#` symbol at the beggining of each line.
+
+Multiline comments can also be added by specifying an array, where each element is a line of the comment.
+
+<hr>
+
+Comments just before a directive can be added by creating an object of the form `{ comment: '...', value: '...' }`, where the value associated with the `value` key is the value of the field; and the `comment` is the comment to appear directly before the field.
+
+For example,
+
+```javascript
+const options = {
+  contact: 'https://example.com/security/',
+  acknowledgments: {
+    comment: 'This comment will appear just above the Acknowledgments field',
+    value: 'https://example.com/hall_of_fame'
+  }
+}
+```
+
+Would become
+
+```
+Contact: https://example.com/security/
+# This comment will appear just above the Acknowledgments field
+Acknowledgments: https://example.com/hall_of_fame
+```
+
+<hr>
+
+If a field allows multiple values, you can leave a comment on each one like so:
+
+```javascript
 const options = {
   contact: [
-    'https://firstMethodOfContact.example.com',
-    'https://secondMethodOfContact.example.com'
+    { comment: 'You can rarely reach me by email', value: 'mailto:security@example.com' },
+    { comment: 'Try this online form instead?', value: 'https://example.com/security/' }
   ]
 }
-
-app.use(securityTxt.setup(options))
 ```
 
-### Comments
-
-To add a comment at the beggining or end of the security.txt file, one may use the keys `_prefixComment` and `_postfixComment` respectively. If one wishes to place a comment immediately before a field, one may use an object which specifies the value of the field and the comment which must come before it.
-
-```js
-const securityTxt = require('express-security-txt')
-
-const options = {
-  _prefixComment: 'This comment goes at the very beggining of the file',
-  contact: {
-    comment: 'This comment goes directly before the Contact: directive',
-    value: 'mailto:email@example.com'
-  },
-  encryption: [
-    'https://example.com/encryption',
-    {
-      comment: 'Comments can appear in the middle of an array of values',
-      value: 'https://example.com/alternativeEncryption'
-    }
-  ],
-  _postfixComment: 'This comment goes at the very end of the file'
-}
-
-app.use(securityTxt.setup(options))
-```
-
-Would generate the file
-
-```txt
-# This comment goes at the very beggining of the file
-# This comment goes directly before the Contact: directive
-Contact: mailto:email@example.com
-Encryption: https://example.com/encryption
-# Comments can appear in the middle of an array of values
-Encryption: https://example.com/alternativeEncryption
-# This comment goes at the very end of the file
-```
-
-If your comment spans multiple lines, you can use `\n` to split it. express-security-txt will automatically insert the relevant `#` symbols. Alternatively, one can use an array of lines instead of a string.
-
-For example:
-
-```js
-const options = {
-  _prefixComment: ['this is a', 'comment\nwhich', 'spans many lines'],
-  contact: 'mailto:email@example.com'
-}
-```
-
-Would generate
-
-```txt
-# this is a
-# comment
-# which
-# spans many lines
-Contact: mailto:email@example.com
-```
 ## Tests
 
 Project tests:
