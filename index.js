@@ -27,12 +27,19 @@ class middleware {
     const securityPolicy = this.formatSecurityPolicy(options)
 
     return (req, res, next) => {
+      const CANONICAL = '/.well-known/security.txt'
+      const ALTERNATIVES = ['/security.txt']
+
       // Only handle requests for our intended use
-      if ((req.path === '/security.txt' || req.path === '/.well-known/security.txt') &&
-          req.method.toLowerCase() === 'get') {
-        return res.status(200).header('Content-Type', 'text/plain').send(securityPolicy)
+      if (req.method.toLowerCase() === 'get') {
+        if (ALTERNATIVES.includes(req.path)) {
+          return res.redirect(301, CANONICAL)
+        } else if (req.path === CANONICAL) {
+          return res.status(200).header('Content-Type', 'text/plain').send(securityPolicy)
+        }
       }
 
+      // Client did not request a security.txt policy
       return next()
     }
   }
