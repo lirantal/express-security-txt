@@ -1,6 +1,6 @@
 const securityTxtMiddleware = require('../index')
 
-test('correctly handle middleware setup for security policy', () => {
+test('middleware redirects to ./well-known/security.txt if given /security.txt', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
@@ -14,23 +14,51 @@ test('correctly handle middleware setup for security policy', () => {
     path: '/security.txt'
   }
 
-  const reqObject = jest.fn()
+  const redirectFn = jest.fn()
   const res = {
-    status: (code) => ({
-      header: (header, value) => {
-        if (value === 'text/plain' && code === 200) {
-          return {
-            send: reqObject
-          }
-        }
-      }
-    })
+    redirect: redirectFn
   }
+
   const next = {}
 
   middleware(req, res, next)
 
-  expect(reqObject.mock.calls.length).toBe(1)
+  expect(redirectFn).toHaveBeenCalledWith(301, '/.well-known/security.txt')
+  expect(redirectFn).toHaveBeenCalledTimes(1)
+})
+
+test('correctly handle middleware setup for security policy', () => {
+  const options = {
+    contact: 'email@example.com',
+    encryption: 'https://www.mykey.com/pgp-key.txt',
+    acknowledgments: 'thank you'
+  }
+
+  const middleware = securityTxtMiddleware.setup(options)
+
+  const req = {
+    method: 'GET',
+    path: '/.well-known/security.txt'
+  }
+
+  const sendFn = jest.fn()
+  const headerFn = jest.fn().mockReturnValue({ send: sendFn })
+  const statusFn = jest.fn().mockReturnValue({ header: headerFn })
+
+  const res = {
+    status: statusFn
+  }
+
+  const next = {}
+
+  middleware(req, res, next)
+
+  expect(statusFn).toHaveBeenCalledWith(200)
+  expect(headerFn).toHaveBeenCalledWith('Content-Type', 'text/plain')
+
+  expect(statusFn).toHaveBeenCalledTimes(1)
+  expect(headerFn).toHaveBeenCalledTimes(1)
+  expect(sendFn).toHaveBeenCalledTimes(1)
 })
 
 test('skip middleware if method is not GET', () => {
