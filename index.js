@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const DIRECTIVES = ['Contact', 'Encryption', 'Canonical', 'Acknowledgments', 'Preferred-Languages', 'Policy', 'Hiring']
+const DIRECTIVES = ['Contact', 'Encryption', 'Canonical', 'Acknowledgments', 'Preferred-Languages', 'Policy', 'Hiring', 'Expires']
 
 /**
  * @TODO Fully remove outdated spelling in breaking changes
