@@ -201,6 +201,7 @@ class middleware {
       acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
+      expires: fieldValue({ canBeArray: false, singleValue: string.regex(/(((Mon|Tue|Wed|Thu|Fri|Sat|Sun))[,]?\s[0-9]{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s([0-9]{4})\s([0-9]{2}):([0-9]{2})(:([0-9]{2}))?\s([\+|\-][0-9]{4})\s?/) }),
       preferredLanguages: fieldValue({ canBeArray: false, singleValue: array.items(string) }),
       policy: fieldValue(),
       hiring: fieldValue(),
