@@ -3,6 +3,7 @@ const securityTxtMiddleware = require('../index')
 test('middleware redirects to ./well-known/security.txt if given /security.txt', () => {
   const options = {
     contact: 'email@example.com',
+    expires: 'Thu, 31 Dec 2020 18:37:07 -0800',
     encryption: 'https://www.mykey.com/pgp-key.txt',
     acknowledgments: 'thank you'
   }
@@ -30,6 +31,7 @@ test('middleware redirects to ./well-known/security.txt if given /security.txt',
 test('correctly handle middleware setup for security policy', () => {
   const options = {
     contact: 'email@example.com',
+    expires: 'Thu, 31 Dec 2020 18:37:07 -0800',
     encryption: 'https://www.mykey.com/pgp-key.txt',
     acknowledgments: 'thank you'
   }
@@ -65,6 +67,7 @@ test('skip middleware if method is not GET', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
+    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
     acknowledgments: 'thank you'
   }
 
@@ -86,6 +89,7 @@ test('skip middleware if path is not /security.txt', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
+    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
     acknowledgments: 'thank you'
   }
 
