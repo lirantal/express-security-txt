@@ -16,7 +16,7 @@ test('validate doesnt throw an error on provided fields', () => {
 test('validate successfully when only mandatory properties provided', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Thu, 1 Jan 1970 04:53:10 +0100',
+    expires: 'Thu, 1 Jan 1970 04:53:10 +0100'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
@@ -116,7 +116,7 @@ test('validate successfully when using prefix/postfix comments', () => {
     _prefixComment: ['This is a\nprefix', 'comment'],
     _postfixComment: 'This is a \npostfix comment',
     contact: 'mailto:security@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: 'Fri, 2 Jan 1970 13:14:15 -0300'
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
@@ -134,8 +134,8 @@ test('validate successfully when using objects for comments', () => {
       }
     ],
     expires: {
-        comment: ['...', '...'],
-        value: 'Fri, 2 Jan 1970 13:14:15 -0300'
+      comment: ['...', '...'],
+      value: 'Fri, 2 Jan 1970 13:14:15 -0300'
     },
     encryption: {
       comment: '...',

@@ -38,7 +38,7 @@ test('formats successfully with multiple contact options and values in-tact', ()
   const phone = '+972+8+6173651'
   const encryption = 'https://www.mykey.com/pgp-key.txt'
   const acknowledgments = 'http://my.website.com'
-  const expires = 'Thu, 31 Dec 2020 18:37:07 -0800';
+  const expires = 'Thu, 31 Dec 2020 18:37:07 -0800'
 
   const options = {
     contact: [
@@ -94,8 +94,8 @@ test('formats successfully with comments', () => {
       value: 'tel:+123'
     },
     expires: {
-        comment: ['pq', 'r'],
-        value: 'Fri, 2 Jan 1970 13:14:15 -0300'
+      comment: ['pq', 'r'],
+      value: 'Fri, 2 Jan 1970 13:14:15 -0300'
     },
     encryption: [
       {
