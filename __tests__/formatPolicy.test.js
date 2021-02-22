@@ -3,7 +3,7 @@ const securityTxt = require('../index')
 test('formats successfully with correct fields (singular contact field)', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('Fri, 2 Jan 1970 13:14:15 +0000'),
     encryption: 'https://www.mykey.com/pgp-key.txt',
     acknowledgments: 'thank you'
   }
@@ -14,21 +14,21 @@ test('formats successfully with correct fields (singular contact field)', () => 
     'Contact: email@example.com\n' +
     'Encryption: https://www.mykey.com/pgp-key.txt\n' +
     'Acknowledgments: thank you\n' +
-    'Expires: Fri, 2 Jan 1970 13:14:15 -0300\n'
+    'Expires: Fri, 2 Jan 1970 13:14:15 +0000\n'
   )
 })
 
 test('formats successfully with mandatory fields only', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Thu, 31 Dec 2020 18:37:07 -0800'
+    expires: new Date('Thu, 31 Dec 2020 18:37:07 +0000')
   }
 
   const res = securityTxt.formatSecurityPolicy(options)
 
   expect(res).toBe(
     'Contact: email@example.com\n' +
-    'Expires: Thu, 31 Dec 2020 18:37:07 -0800\n'
+    'Expires: Thu, 31 Dec 2020 18:37:07 +0000\n'
   )
 })
 
@@ -38,7 +38,7 @@ test('formats successfully with multiple contact options and values in-tact', ()
   const phone = '+972+8+6173651'
   const encryption = 'https://www.mykey.com/pgp-key.txt'
   const acknowledgments = 'http://my.website.com'
-  const expires = 'Thu, 31 Dec 2020 18:37:07 -0800'
+  const expires = 'Thu, 31 Dec 2020 18:37:07 +0000'
 
   const options = {
     contact: [
@@ -48,7 +48,7 @@ test('formats successfully with multiple contact options and values in-tact', ()
     ],
     encryption,
     acknowledgments,
-    expires
+    expires: new Date(expires)
   }
 
   const res = securityTxt.formatSecurityPolicy(options)
@@ -66,7 +66,7 @@ test('formats successfully with multiple contact options and values in-tact', ()
 test('formats successfully with policy and hiring fields', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('Fri, 2 Jan 1970 13:14:15 +0000'),
     policy: 'http://example.com/policy.txt',
     hiring: 'http://example.com/hiring.txt'
   }
@@ -77,7 +77,7 @@ test('formats successfully with policy and hiring fields', () => {
     'Contact: email@example.com\n' +
     'Policy: http://example.com/policy.txt\n' +
     'Hiring: http://example.com/hiring.txt\n' +
-    'Expires: Fri, 2 Jan 1970 13:14:15 -0300\n'
+    'Expires: Fri, 2 Jan 1970 13:14:15 +0000\n'
   )
 })
 
@@ -95,7 +95,7 @@ test('formats successfully with comments', () => {
     },
     expires: {
       comment: ['pq', 'r'],
-      value: 'Fri, 2 Jan 1970 13:14:15 -0300'
+      value: new Date('Fri, 2 Jan 1970 13:14:15 +0000')
     },
     encryption: [
       {
@@ -129,7 +129,7 @@ test('formats successfully with comments', () => {
     'Encryption: https://c.example.com\n' +
     '# pq\n' +
     '# r\n' +
-    'Expires: Fri, 2 Jan 1970 13:14:15 -0300\n' +
+    'Expires: Fri, 2 Jan 1970 13:14:15 +0000\n' +
     '# d\n'
   )
 })
@@ -137,7 +137,7 @@ test('formats successfully with comments', () => {
 test('uses new spelling with deprecated keys', () => {
   const options = {
     contact: 'tel:+123',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('Fri, 2 Jan 1970 13:14:15 +0000'),
     acknowledgement: 'https://example.com'
   }
 
@@ -148,7 +148,7 @@ test('uses new spelling with deprecated keys', () => {
   expect(res).toBe(
     'Contact: tel:+123\n' +
     'Acknowledgments: https://example.com\n' +
-    'Expires: Fri, 2 Jan 1970 13:14:15 -0300\n'
+    'Expires: Fri, 2 Jan 1970 13:14:15 +0000\n'
   )
 
   expect(global.console.warn).toHaveBeenCalled()
@@ -157,7 +157,7 @@ test('uses new spelling with deprecated keys', () => {
 test('preferredLanguages directive works with multiple values', () => {
   const options = {
     contact: 'mailto:security@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('Fri, 2 Jan 1970 13:14:15 +0000'),
     preferredLanguages: ['en', 'ru', 'es']
   }
 
@@ -166,14 +166,14 @@ test('preferredLanguages directive works with multiple values', () => {
   expect(res).toBe(
     'Contact: mailto:security@example.com\n' +
     'Preferred-Languages: en, ru, es\n' +
-    'Expires: Fri, 2 Jan 1970 13:14:15 -0300\n'
+    'Expires: Fri, 2 Jan 1970 13:14:15 +0000\n'
   )
 })
 
 test('preferredLanguages directive works with one value only', () => {
   const options = {
     contact: 'mailto:security@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('Fri, 2 Jan 1970 13:14:15 +0000'),
     preferredLanguages: 'en'
   }
 
@@ -182,6 +182,6 @@ test('preferredLanguages directive works with one value only', () => {
   expect(res).toBe(
     'Contact: mailto:security@example.com\n' +
     'Preferred-Languages: en\n' +
-    'Expires: Fri, 2 Jan 1970 13:14:15 -0300\n'
+    'Expires: Fri, 2 Jan 1970 13:14:15 +0000\n'
   )
 })

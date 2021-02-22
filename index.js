@@ -128,6 +128,10 @@ class middleware {
           valueOption = valueOption.value
         }
 
+        if (outputDirective === 'Expires') {
+          valueOption = this.dateToRFC5322(valueOption)
+        }
+
         tmpPolicyArray.push(`${outputDirective}: ${valueOption}\n`)
       })
     }
@@ -201,7 +205,7 @@ class middleware {
       acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
-      expires: fieldValue({ canBeArray: false, singleValue: string.regex(/(((Mon|Tue|Wed|Thu|Fri|Sat|Sun))[,]?\s[0-9]{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s([0-9]{4})\s([0-9]{2}):([0-9]{2})(:([0-9]{2}))?\s([+|-][0-9]{4})\s?/), required: true }),
+      expires: fieldValue({ required: true, singleValue: Joi.date() }),
       preferredLanguages: fieldValue({ canBeArray: false, singleValue: array.items(string) }),
       policy: fieldValue(),
       hiring: fieldValue(),
@@ -240,10 +244,31 @@ class middleware {
    * words which have been strung together with hyphens.
    *
    * @param {string} directive - The name of the security.txt directive
-   * @return {strng} The camelCase version of the directive
+   * @return {string} The camelCase version of the directive
    */
   static camelCase (directive) {
     return directive.split('-').map((word, isNotFirst) => isNotFirst ? word : word.toLowerCase()).join('')
+  }
+
+  /**
+   * Converts a Date object into a string, following the RFC 5322 standard
+   * https://tools.ietf.org/html/rfc5322#section-3.3
+   *
+   * @param {Date} date - The date object to be converted into a string
+   * @return {string} An RFC 5322 conformant representation of date
+   */
+  static dateToRFC5322 (date) {
+    const UTCMonthAndDate = new Date(Date.UTC(1970, date.getUTCMonth(), date.getUTCDate())) // used for getting English names in UTC
+
+    const dayOfWeek = new Intl.DateTimeFormat('en-US', { weekday: 'short' }).format(UTCMonthAndDate)
+    const monthName = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(UTCMonthAndDate)
+
+    const datePortion = dayOfWeek + ', ' + date.getUTCDate() + ' ' + monthName + ' ' + date.getUTCFullYear()
+    const timePortion = date.getUTCHours().toString().padStart(2, '0') +
+                          ':' + date.getUTCMinutes().toString().padStart(2, '0') +
+                          ':' + date.getUTCSeconds().toString().padStart(2, '0')
+
+    return datePortion + ' ' + timePortion + ' +0000'
   }
 }
 

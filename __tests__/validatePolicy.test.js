@@ -4,7 +4,7 @@ test('validate doesnt throw an error on provided fields', () => {
   const options = {
     contact: 'email@example.com',
     encryption: 'https://www.mykey.com/pgp-key.txt',
-    expires: 'Thu, 31 Dec 2020 18:37:07 -0800',
+    expires: new Date('3 December 2020 12:00'),
     acknowledgments: 'thank you',
     canonical: 'https://example.com/.well-known/security.txt'
   }
@@ -16,7 +16,7 @@ test('validate doesnt throw an error on provided fields', () => {
 test('validate successfully when only mandatory properties provided', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Thu, 1 Jan 1970 04:53:10 +0100'
+    expires: new Date('3 December 2020 12:00')
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
@@ -30,7 +30,7 @@ test('validate fails when options is not an object', () => {
 
 test('validate fails when no contact property provided', () => {
   const options = {
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     encryption: 'https://www.mykey.com/pgp-key.txt'
   }
 
@@ -40,7 +40,7 @@ test('validate fails when no contact property provided', () => {
 test('validate fails when encryption property is used with insecure http', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     encryption: 'http://www.mykey.com/pgp-key.txt'
   }
 
@@ -50,7 +50,7 @@ test('validate fails when encryption property is used with insecure http', () =>
 test('validate successfully when encryption property is used with dns scheme', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     encryption: 'dns:abc'
   }
 
@@ -60,7 +60,7 @@ test('validate successfully when encryption property is used with dns scheme', (
 test('validate fails when encryption property is not a string or array', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     encryption: {}
   }
 
@@ -70,7 +70,7 @@ test('validate fails when encryption property is not a string or array', () => {
 test('validate fails when acknowledgments property is not a string or array', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     encryption: '',
     acknowledgments: {}
   }
@@ -81,7 +81,7 @@ test('validate fails when acknowledgments property is not a string or array', ()
 test('validate fails when policy property is not a string', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     policy: {}
   }
 
@@ -91,7 +91,7 @@ test('validate fails when policy property is not a string', () => {
 test('validate fails when hiring property is not a string', () => {
   const options = {
     contact: 'email@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     hiring: {}
   }
 
@@ -101,7 +101,7 @@ test('validate fails when hiring property is not a string', () => {
 test('validate successfully when providing arrays', () => {
   const options = {
     contact: ['a', 'b', 'c'],
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300', // mandatory, but specified not to be an array
+    expires: new Date('3 December 2020 12:00'), // Mandatory, but spefied not to be an array
     acknowledgments: ['a', 'b', 'c'],
     policy: ['a', 'b', 'c'],
     hiring: ['a', 'b', 'c'],
@@ -116,7 +116,7 @@ test('validate successfully when using prefix/postfix comments', () => {
     _prefixComment: ['This is a\nprefix', 'comment'],
     _postfixComment: 'This is a \npostfix comment',
     contact: 'mailto:security@example.com',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300'
+    expires: new Date('3 December 2020 12:00')
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
@@ -135,7 +135,7 @@ test('validate successfully when using objects for comments', () => {
     ],
     expires: {
       comment: ['...', '...'],
-      value: 'Fri, 2 Jan 1970 13:14:15 -0300'
+      value: new Date('3 December 2020 12:00')
     },
     encryption: {
       comment: '...',
@@ -152,7 +152,7 @@ test('validate fails when not providing a value in comment object', () => {
       comment: ''
     },
 
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300'
+    expires: new Date('3 December 2020 12:00')
   }
 
   const arrayOfObjects = {
@@ -166,7 +166,7 @@ test('validate fails when not providing a value in comment object', () => {
       }
     ],
 
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300'
+    expires: new Date('3 December 2020 12:00')
   }
 
   expect(() => securityTxt.validatePolicyFields(singleObject)).toThrow()
@@ -177,7 +177,7 @@ test('validate fails when using a [{value: [...]}] nested array', () => {
   const options = {
     contact: [{ value: ['test'] }],
     encryption: [{ value: ['test'] }],
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300'
+    expires: new Date('3 December 2020 12:00')
   }
 
   expect(() => securityTxt.validatePolicyFields(options)).toThrow()
@@ -186,7 +186,7 @@ test('validate fails when using a [{value: [...]}] nested array', () => {
 test('deprecated spelling is allowed', () => {
   const options = {
     contact: '...',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     acknowledgement: '...' // deprecated spelling
   }
 
@@ -196,7 +196,7 @@ test('deprecated spelling is allowed', () => {
 test('using both deprecated spelling and new spelling throws', () => {
   const options = {
     contact: '...',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     acknowledgments: '...',
     acknowledgement: '...'
   }
@@ -207,7 +207,7 @@ test('using both deprecated spelling and new spelling throws', () => {
 test('passing an array for Canonical fails', () => {
   const options = {
     contact: '...',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     canonical: ['...', '...']
   }
 
@@ -217,19 +217,19 @@ test('passing an array for Canonical fails', () => {
 test('validate successfully for the preferredLanguages key', () => {
   const optionsWithArray = {
     contact: '...',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     preferredLanguages: ['en', 'es']
   }
 
   const optionsWithString = {
     contact: '...',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     preferredLanguages: 'ru'
   }
 
   const optionsWithComment = {
     contact: '...',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     preferredLanguages: { comment: 'I am fluent in these', value: ['en', 'ru'] }
   }
 
@@ -241,7 +241,7 @@ test('validate successfully for the preferredLanguages key', () => {
 test('validate fails if Array<object> fed to preferredLanguages', () => {
   const options = {
     contact: '...',
-    expires: 'Fri, 2 Jan 1970 13:14:15 -0300',
+    expires: new Date('3 December 2020 12:00'),
     preferredLanguages: [
       { comment: '...', value: 'en' }
     ]
