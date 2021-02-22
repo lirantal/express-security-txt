@@ -24,7 +24,7 @@ class middleware {
    * @return {Function}            returns an express middleware function
    */
   static setup (options = {}) {
-    const securityPolicy = this.formatSecurityPolicy(options)
+    const securityPolicy = middleware.formatSecurityPolicy(options)
 
     return (req, res, next) => {
       const CANONICAL = '/.well-known/security.txt'
@@ -52,7 +52,7 @@ class middleware {
    */
   static formatSecurityPolicy (options) {
     // Before applying formatting let's validate the options
-    this.validatePolicyFields(options)
+    middleware.validatePolicyFields(options)
 
     const asComment = comment => {
       const flatten = (a, b) => a.concat(b)
@@ -94,7 +94,7 @@ class middleware {
       , directive)
 
     for (let directive of DIRECTIVES.reduce(addDeprecatedSpellings, [])) {
-      const key = this.camelCase(directive)
+      const key = middleware.camelCase(directive)
       const outputDirective = undeprecate(directive)
 
       if (!options.hasOwnProperty(key)) {
@@ -104,7 +104,7 @@ class middleware {
       let value = options[key] // eslint-disable-line security/detect-object-injection
 
       if (outputDirective !== directive && typeof value !== 'undefined') {
-        console.warn('[express-security-txt]: Deprecated key: "' + key + '". Use ' + this.camelCase(outputDirective) + ' instead')
+        console.warn('[express-security-txt]: Deprecated key: "' + key + '". Use ' + middleware.camelCase(outputDirective) + ' instead')
       }
 
       if (!Array.isArray(value)) {
@@ -129,7 +129,7 @@ class middleware {
         }
 
         if (outputDirective === 'Expires') {
-          valueOption = this.dateToRFC5322(valueOption)
+          valueOption = middleware.dateToRFC5322(valueOption)
         }
 
         tmpPolicyArray.push(`${outputDirective}: ${valueOption}\n`)
@@ -217,7 +217,7 @@ class middleware {
 
     // Deprecate fields which have changed in the specification
     Object.entries(DEPRECATIONS).forEach(([notDeprecated, deprecated]) => {
-      const [camelDep, camelNotDep] = [deprecated, notDeprecated].map(this.camelCase)
+      const [camelDep, camelNotDep] = [deprecated, notDeprecated].map(middleware.camelCase)
 
       schema = schema.keys({
         // eslint-disable-next-line security/detect-object-injection
