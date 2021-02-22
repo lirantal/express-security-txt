@@ -31,11 +31,14 @@ const securityTxt = require('express-security-txt')
 
 const options = {
   contact: 'https://example.com/security/',
+  expires: new Date('22 February 2021 +0000')
   preferredLanguages: 'en'
 }
 
 app.use(securityTxt.setup(options))
 ```
+
+Dates (for the `expires` field) will be converted into the correct format and will be presented in UTC. It's recommended that you specify the timezone explicitly in your `Date` constructor, otherwise the expiration time may change depending on the timezone on which your Node.js server is running.
 
 ### Passing multiple values
 
