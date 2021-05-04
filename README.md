@@ -13,7 +13,7 @@
 Express middleware that implements a security.txt path and policy. Allows the repeating of a directive, as well as the insertion of comments.
 
 References:
-* [security.txt RFC](https://www.ietf.org/id/draft-foudil-securitytxt-05.txt)
+* [security.txt RFC](https://tools.ietf.org/html/draft-foudil-securitytxt-05)
 * [security.txt project on github](https://github.com/securitytxt/security-txt)
 
 ## Installation
@@ -24,7 +24,7 @@ yarn add express-security-txt
 
 ## Usage
 
-Define an options object with the keys that make up a valid [security.txt](https://www.ietf.org/id/draft-foudil-securitytxt-05.txt) file. All the keys are in camelCase.
+Define an options object with the keys that make up a valid [security.txt](https://tools.ietf.org/html/draft-foudil-securitytxt-05) file. All the keys are in camelCase.
 
 ```javascript
 const securityTxt = require('express-security-txt')
