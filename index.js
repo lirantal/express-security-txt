@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const DIRECTIVES = ['Contact', 'Encryption', 'Canonical', 'Acknowledgments', 'Preferred-Languages', 'Policy', 'Hiring']
+const DIRECTIVES = ['Contact', 'Expires', 'Encryption', 'Canonical', 'Acknowledgments', 'Preferred-Languages', 'Policy', 'Hiring']
 
 /**
  * @TODO Fully remove outdated spelling in breaking changes
@@ -119,6 +119,11 @@ class middleware {
         value = [ value.map(languageCode => languageCode.trim()).join(', ') ]
       }
 
+      // Dates must be in ISO 8601 format
+      if (value instanceof Date) {
+        value = value.toISOString()
+      }
+
       value.forEach(valueOption => {
         if (valueOption.hasOwnProperty('value')) {
           if (valueOption.hasOwnProperty('comment')) {
@@ -196,10 +201,16 @@ class middleware {
       return schema
     }
 
+    const dateStringOrDate = Joi.alternatives().try(
+        Joi.date().iso(), // a string in ISO format
+        Joi.date().options({ convert: false }) // an actual JavaScript Date object
+    )
+
     let uncompiledSchema = {
       _prefixComment: comment,
       acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
+      expires: fieldValue({ required: true, singleValue: dateStringOrDate })
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
       preferredLanguages: fieldValue({ canBeArray: false, singleValue: array.items(string) }),
       policy: fieldValue(),
