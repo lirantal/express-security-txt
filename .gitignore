@@ -12,6 +12,7 @@ coverage
 # IDE
 *.iml
 .idea
+.dccache
 
 # Docs
 docs/
