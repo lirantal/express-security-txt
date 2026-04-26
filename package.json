@@ -13,9 +13,7 @@
     "docs": "yarn run docs:code && yarn run docs:api",
     "docs:api": "doxdox *.js --layout bootstrap --output docs/index.html",
     "docs:code": "docco *.js --output docs/code",
-    "semantic-release": "semantic-release",
-    "snyk-protect": "snyk protect",
-    "prepublishOnly": "npm run snyk-protect"
+    "semantic-release": "semantic-release"
   },
   "publishConfig": {
     "provenance": true,
