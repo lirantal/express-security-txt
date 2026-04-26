@@ -3,7 +3,6 @@
 [![npm module downloads](http://img.shields.io/npm/dt/express-security-txt.svg)](https://www.npmjs.org/package/express-security-txt)
 [![Build Status](https://github.com/lirantal/express-security-txt/workflows/CI/badge.svg)](https://github.com/lirantal/express-security-txt/actions?workflow=main)
 [![codecov](https://codecov.io/gh/lirantal/express-security-txt/branch/master/graph/badge.svg)](https://codecov.io/gh/lirantal/express-security-txt)
-[![Known Vulnerabilities](https://snyk.io/test/github/lirantal/express-security-txt/badge.svg)](https://snyk.io/test/github/lirantal/express-security-txt)
 [![Security Responsible Disclosure](https://img.shields.io/badge/Security-Responsible%20Disclosure-yellow.svg)](https://github.com/nodejs/security-wg/blob/master/processes/responsible_disclosure_template.md)
 
 [![express-security-txt](https://snyk.io/advisor/npm-package/express-security-txt/badge.svg)](https://snyk.io/advisor/npm-package/express-security-txt)
