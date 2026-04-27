@@ -1,7 +1,7 @@
 [![view on npm](http://img.shields.io/npm/v/express-security-txt.svg)](https://www.npmjs.org/package/express-security-txt)
 [![view on npm](http://img.shields.io/npm/l/express-security-txt.svg)](https://www.npmjs.org/package/express-security-txt)
 [![npm module downloads](http://img.shields.io/npm/dt/express-security-txt.svg)](https://www.npmjs.org/package/express-security-txt)
-[![Build Status](https://github.com/lirantal/express-security-txt/workflows/CI/badge.svg)](https://github.com/lirantal/express-security-txt/actions?workflow=main)
+[![Build Status](https://github.com/lirantal/express-security-txt/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/lirantal/express-security-txt/actions?workflow=main)
 [![codecov](https://codecov.io/gh/lirantal/express-security-txt/branch/master/graph/badge.svg)](https://codecov.io/gh/lirantal/express-security-txt)
 [![Security Responsible Disclosure](https://img.shields.io/badge/Security-Responsible%20Disclosure-yellow.svg)](https://github.com/nodejs/security-wg/blob/master/processes/responsible_disclosure_template.md)
 
