@@ -163,3 +163,17 @@ test('preferredLanguages directive works with one value only', () => {
     'Preferred-Languages: en\n'
   )
 })
+
+test('formats Expires dates using RFC 5322', () => {
+  const options = {
+    contact: 'mailto:security@example.com',
+    expires: new Date('2026-05-22T19:07:50.000Z')
+  }
+
+  const res = securityTxt.formatSecurityPolicy(options)
+
+  expect(res).toBe(
+    'Contact: mailto:security@example.com\n' +
+    'Expires: Fri, 22 May 2026 19:07:50 GMT\n'
+  )
+})

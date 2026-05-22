@@ -222,3 +222,21 @@ test('validate fails if Array<object> fed to preferredLanguages', () => {
 
   expect(() => securityTxt.validatePolicyFields(options).toThrow())
 })
+
+test('validate successfully when expires is an RFC 5322 string', () => {
+  const options = {
+    contact: 'mailto:security@example.com',
+    expires: 'Fri, 22 May 2026 19:07:50 GMT'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('validate fails when expires is an ISO 8601 string', () => {
+  const options = {
+    contact: 'mailto:security@example.com',
+    expires: '2026-05-22T19:07:50.000Z'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})

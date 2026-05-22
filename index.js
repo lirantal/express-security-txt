@@ -119,11 +119,6 @@ class middleware {
         value = [ value.map(languageCode => languageCode.trim()).join(', ') ]
       }
 
-      // Dates must be in ISO 8601 format
-      if (value instanceof Date) {
-        value = value.toISOString()
-      }
-
       value.forEach(valueOption => {
         if (valueOption.hasOwnProperty('value')) {
           if (valueOption.hasOwnProperty('comment')) {
@@ -131,6 +126,10 @@ class middleware {
           }
 
           valueOption = valueOption.value
+        }
+
+        if (outputDirective === 'Expires' && valueOption instanceof Date) {
+          valueOption = valueOption.toUTCString()
         }
 
         tmpPolicyArray.push(`${outputDirective}: ${valueOption}\n`)
@@ -201,9 +200,10 @@ class middleware {
       return schema
     }
 
+    const rfc5322Date = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (?:GMT|[+-]\d{4})$/
     const dateStringOrDate = Joi.alternatives().try(
-        Joi.date().iso(), // a string in ISO format
-        Joi.date().options({ convert: false }) // an actual JavaScript Date object
+      Joi.string().regex(rfc5322Date), // a string in RFC 5322 format
+      Joi.date().options({ convert: false }) // an actual JavaScript Date object
     )
 
     let uncompiledSchema = {
