@@ -5,8 +5,6 @@
 [![codecov](https://codecov.io/gh/lirantal/express-security-txt/branch/master/graph/badge.svg)](https://codecov.io/gh/lirantal/express-security-txt)
 [![Security Responsible Disclosure](https://img.shields.io/badge/Security-Responsible%20Disclosure-yellow.svg)](https://github.com/nodejs/security-wg/blob/master/processes/responsible_disclosure_template.md)
 
-[![express-security-txt](https://snyk.io/advisor/npm-package/express-security-txt/badge.svg)](https://snyk.io/advisor/npm-package/express-security-txt)
-
 # Express Security Txt
 
 Express middleware that implements a security.txt path and policy. Allows the repeating of a directive, as well as the insertion of comments.
