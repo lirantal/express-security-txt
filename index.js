@@ -210,7 +210,7 @@ class middleware {
       _prefixComment: comment,
       acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
-      expires: fieldValue({ required: true, singleValue: dateStringOrDate })
+      expires: fieldValue({ required: true, singleValue: dateStringOrDate }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
       preferredLanguages: fieldValue({ canBeArray: false, singleValue: array.items(string) }),
       policy: fieldValue(),
