@@ -222,3 +222,50 @@ test('validate fails if Array<object> fed to preferredLanguages', () => {
 
   expect(() => securityTxt.validatePolicyFields(options).toThrow())
 })
+
+test('validate successfully when expires is an RFC 5322 string', () => {
+  const options = {
+    contact: 'mailto:security@example.com',
+    expires: 'Fri, 22 May 2026 19:07:50 GMT'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('validate successfully when expires is a Date object', () => {
+  const options = {
+    contact: 'mailto:security@example.com',
+    expires: new Date('2026-05-22T19:07:50.000Z')
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).not.toThrow()
+})
+
+test('validate fails when expires is an ISO 8601 string', () => {
+  const options = {
+    contact: 'mailto:security@example.com',
+    expires: '2026-05-22T19:07:50.000Z'
+  }
+
+  expect(() => securityTxt.validatePolicyFields(options)).toThrow()
+})
+
+test('validate fails when expires appears more than once', () => {
+  const optionsWithArray = {
+    contact: 'mailto:security@example.com',
+    expires: [
+      'Fri, 22 May 2026 19:07:50 GMT',
+      'Sat, 23 May 2026 19:07:50 GMT'
+    ]
+  }
+
+  const optionsWithCommentObjectArray = {
+    contact: 'mailto:security@example.com',
+    expires: [
+      { comment: '...', value: 'Fri, 22 May 2026 19:07:50 GMT' }
+    ]
+  }
+
+  expect(() => securityTxt.validatePolicyFields(optionsWithArray)).toThrow()
+  expect(() => securityTxt.validatePolicyFields(optionsWithCommentObjectArray)).toThrow()
+})

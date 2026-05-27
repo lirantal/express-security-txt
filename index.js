@@ -1,7 +1,7 @@
 'use strict'
 
 const Joi = require('joi')
-const DIRECTIVES = ['Contact', 'Encryption', 'Canonical', 'Acknowledgments', 'Preferred-Languages', 'Policy', 'Hiring']
+const DIRECTIVES = ['Contact', 'Expires', 'Encryption', 'Canonical', 'Acknowledgments', 'Preferred-Languages', 'Policy', 'Hiring']
 
 /**
  * @TODO Fully remove outdated spelling in breaking changes
@@ -128,6 +128,10 @@ class middleware {
           valueOption = valueOption.value
         }
 
+        if (outputDirective === 'Expires' && valueOption instanceof Date) {
+          valueOption = valueOption.toUTCString()
+        }
+
         tmpPolicyArray.push(`${outputDirective}: ${valueOption}\n`)
       })
     }
@@ -196,10 +200,17 @@ class middleware {
       return schema
     }
 
+    const rfc5322Date = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), \d{2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4} \d{2}:\d{2}:\d{2} (?:GMT|[+-]\d{4})$/
+    const dateStringOrDate = Joi.alternatives().try(
+      Joi.string().regex(rfc5322Date), // a string in RFC 5322 format
+      Joi.date().options({ convert: false }) // an actual JavaScript Date object
+    )
+
     let uncompiledSchema = {
       _prefixComment: comment,
       acknowledgments: fieldValue(),
       contact: fieldValue({ required: true }),
+      expires: fieldValue({ canBeArray: false, singleValue: dateStringOrDate }),
       encryption: fieldValue({ singleValue: string.regex(/^(?!http:)/i) }),
       preferredLanguages: fieldValue({ canBeArray: false, singleValue: array.items(string) }),
       policy: fieldValue(),
