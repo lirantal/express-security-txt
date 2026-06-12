@@ -135,5 +135,9 @@
       "@semantic-release/github"
     ]
   },
-  "snyk": true
+  "snyk": true,
+  "engines": {
+    "node": ">=24.0.0",
+    "npm": ">=11.10.0"
+  }
 }
