@@ -113,6 +113,10 @@ Project linting:
 yarn run lint
 ```
 
+## Documentation
+
+- [Project documentation](./docs/README.md) - development, testing, architecture, and conventions.
+
 ## Contributing
 
 ### Commit Guidelines
