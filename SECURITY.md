@@ -1,16 +1,27 @@
-This project participates in the Responsible Disclosure Policy program for the Node.js Security Ecosystem.
+# Security Policy
 
-# Responsible Disclosure Policy
+**Please do not report security vulnerabilities through public GitHub issues**.
 
-A responsible disclosure policy helps protect the project and its users from security vulnerabilities discovered in the project’s scope by employing a process where vulnerabilities are publicly disclosed after a reasonable time period to allow patching the vulnerability. 
+## Responsible disclosure security policy
 
-All security bugs are taken seriously and are considered as top priority. 
-Your efforts to responsibly disclose your findings are appreciated and will be taken into account to acknowledge your contributions.
+A responsible disclosure policy helps protect users of the project from public
+disclosure of security vulnerabilities without a fix available. We achieve
+that by following the process where vulnerabilities are first triaged in a
+private manner, and are only publicly disclosed after a reasonable time period
+of the patch being available for users.
 
+We kindly ask you to refrain from malicious acts that put our users, the
+project, or any of the project’s team members at risk.
 
-## Reporting a Security Issue
+## Reporting a security issue
 
-Any security related issue should be reported to the [Node.js Ecosystem](https://hackerone.com/nodejs-ecosystem
-) program hosted on HackerOne which follows the [3rd party responsible disclosure process](https://github.com/nodejs/security-wg/blob/master/processes/third_party_vuln_process.md) set by the Node.js Security WG. One may also directly contact the project’s maintainers, but through the HackerOne program the Security WG members will take care of triaging the vulnerability and invite project maintainers to participate in the report.
+We consider the security of the project a top priority.
 
-As an alternative method, vulnerabilities can also be reported by emailing security-ecosystem@nodejs.org.
+If you discover a security vulnerability, please use one of the following
+means of communications to report it to us:
+
+- If enabled, report the security issue via GitHub's private vulnerability reporting
+- As a secondary method, you may contact the maintainer via email
+
+We sincerely appreciate your efforts to responsibly disclose your findings
+with us.
